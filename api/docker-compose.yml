@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  octalol_api:
+    build: .
+    ports:
+      - '8080:3001'
+    environment:
+      - FROM_ENV_FILE=config.env
+    volumes:
+      - ./app:/app

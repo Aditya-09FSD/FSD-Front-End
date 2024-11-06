@@ -1,0 +1,6 @@
+main.socket.adskos.com:8080 {
+        reverse_proxy localhost:8081
+}
+main.socket.adskos.com:9090 {
+	reverse_proxy localhost:9091
+}
