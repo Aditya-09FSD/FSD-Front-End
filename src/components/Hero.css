@@ -1,0 +1,12 @@
+#hero {
+    background: fixed;
+    height: 400px;
+    color: white;
+  }
+  
+  #hero p.lead {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    border-radius: 5px;
+  }
+  

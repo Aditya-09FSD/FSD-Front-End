@@ -1,0 +1,21 @@
+conversion to react
+home page -
+    about page
+    contact
+    admissions
+    achievements
+    login
+
+crm inside -
+    teachers side
+        dashboard
+        attendace screen
+        help and feedback
+ 
+    student
+        dashboard
+        help and feedback
+
+    general
+        profile page
+            avatar - below details
