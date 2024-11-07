@@ -11,8 +11,10 @@ signup page - ok
 
 TODO: ->
 0. Better Frontend
-1. Connect to actual api
-2. crm inside -
+1. attendace api left 
+3. admin page all background same 
+
+crm inside -
     teachers side
         dashboard
         attendace screen
@@ -26,17 +28,3 @@ TODO: ->
         profile page
             avatar - below details
 
-login pe role pucho
-
-user send login request -> api send token to user -> save token in cookies -> get token from cookies and getme or get my detials -> 
-display details -> 
-
-- teacher dashboard 
-        - profile 
-        - get my profile
-        
-        - record attendace
-- student dashboard 
-        - profile 
-
-        - subject wise attendace

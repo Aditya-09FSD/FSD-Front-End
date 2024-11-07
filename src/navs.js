@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   Home,
   Login,
-  Signup,
   AdminDash,
   StudentDash,
   TeachDash,
@@ -26,7 +25,6 @@ const Navs = () => {
 
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
-          <Route path="/signup" element={<Signup />} />
           {isLoggedIn && (
             <>
               <Route path="/admin" element={<AdminDash />} />

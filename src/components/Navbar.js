@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import axios from "axios";
 import { useAuth } from "../context";
+import { LogoutOutlined } from "@ant-design/icons";
 
 function Navbar() {
   const [isMenuVisible, setIsMenuVisible] = useState(true);
@@ -72,12 +72,6 @@ function Navbar() {
           {!isLoggedIn ? (
             <>
               <Link
-                to="/signup"
-                className="text-white hover:text-yellow-400 transition-all"
-              >
-                Signup
-              </Link>
-              <Link
                 to="/login"
                 className="text-white hover:text-yellow-400 transition-all"
               >
@@ -85,8 +79,20 @@ function Navbar() {
               </Link>
             </>
           ) : (
-            <Button onClick={() => logout()} danger>
-              Loggout
+            <Button
+              onClick={logout}
+              type="primary"
+              icon={<LogoutOutlined />}
+              danger
+              style={{
+                borderRadius: "50px",
+                padding: "0 20px",
+                fontWeight: "600",
+                backgroundColor: "#ff4d4f",
+                borderColor: "#ff4d4f",
+              }}
+            >
+              Log Out
             </Button>
           )}
         </div>

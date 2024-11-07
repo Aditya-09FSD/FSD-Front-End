@@ -61,7 +61,8 @@ const Profile = () => {
       <div className="mt-6">
         <h3 className="text-xl font-semibold text-blue-600">About</h3>
         <p className="text-gray-700 mt-2">
-          {userData?.bio || "No bio available."}
+          {userData?.bio || "No bio available."} <br />
+          Role: {userData?.role || "User"}
         </p>
       </div>
     </div>

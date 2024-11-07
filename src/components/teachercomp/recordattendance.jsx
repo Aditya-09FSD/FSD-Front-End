@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { apiurl } from "../../devdata/constants";
+import Cookies from "js-cookie";
+import { useAuth } from "../../context";
+import { Button, Input, Select, Checkbox, Form, Space, Typography } from "antd";
+import Swal from "sweetalert2";
+
+const { Title } = Typography;
 
 function RecordAttendance() {
-  const [subjects, setSubjects] = useState([]);
   const [students, setStudents] = useState([]);
   const [attendanceData, setAttendanceData] = useState({
     date: "",
     subject: "",
     students: [],
   });
-  const [message, setMessage] = useState(null);
+  const { subjectArray } = useAuth();
 
-  // Fetch subjects and students when the component mounts
+  // Fetch students when the component mounts
   useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const response = await axios.get("/api/subjects"); // Adjust the API path as needed
-        setSubjects(response.data);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    };
-
     const fetchStudents = async () => {
       try {
-        const response = await axios.get("/api/students"); // Adjust the API path as needed
-        setStudents(response.data);
+        const token = Cookies.get("token");
+
+        const response = await axios.get(`${apiurl}/students`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setStudents(response.data.data.data);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
 
-    fetchSubjects();
     fetchStudents();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAttendanceData({ ...attendanceData, [name]: value });
+  };
+
+  const handleSubjectChange = (value) => {
+    setAttendanceData({ ...attendanceData, subject: value });
   };
 
   const handleAttendanceChange = (stdId) => {
@@ -51,90 +57,120 @@ function RecordAttendance() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     try {
       const response = await axios.post(
         "/api/Models/AttendanceModel",
         attendanceData
-      ); // Adjust the API path
-      setMessage("Attendance recorded successfully!");
+      );
+      Swal.fire({
+        title: "Success!",
+        text: "Attendance recorded successfully!",
+        icon: "success",
+        confirmButtonText: "Okay",
+        customClass: {
+          confirmButton: "ant-btn ant-btn-primary",
+        },
+      });
       setAttendanceData({
         date: "",
         subject: "",
         students: [],
       });
     } catch (error) {
-      setMessage("Error recording attendance. Please try again.");
+      Swal.fire({
+        title: "Error",
+        text: "Error recording attendance. Please try again.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+        customClass: {
+          confirmButton: "ant-btn ant-btn-danger",
+        },
+      });
     }
   };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-center">Record Attendance</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Date
-          </label>
-          <input
+      <Title level={2} style={{ textAlign: "center", color: "#1890ff" }}>
+        Record Attendance
+      </Title>
+      <Form
+        onFinish={handleSubmit}
+        className="space-y-6"
+        layout="vertical"
+        initialValues={attendanceData}
+      >
+        <Form.Item
+          label="Date"
+          name="date"
+          rules={[{ required: true, message: "Please select a date!" }]}
+        >
+          <Input
             type="date"
             name="date"
             value={attendanceData.date}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            style={{
+              borderRadius: "10px",
+              padding: "10px",
+              border: "1px solid #dcdfe6",
+            }}
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Subject
-          </label>
-          <select
-            name="subject"
+        <Form.Item
+          label="Subject"
+          name="subject"
+          rules={[{ required: true, message: "Please select a subject!" }]}
+        >
+          <Select
             value={attendanceData.subject}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
-          >
-            <option value="">Select Subject</option>
-            {subjects.map((subject) => (
-              <option key={subject._id} value={subject._id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-        </div>
+            onChange={handleSubjectChange}
+            options={subjectArray.map((subjectOption) => ({
+              value: subjectOption._id,
+              label: subjectOption.name, // Assuming subject has 'id' and 'name'
+            }))}
+            placeholder="Select a subject"
+            className="w-full mb-4"
+          />
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Students
-          </label>
+        <Form.Item label="Students">
           {students.map((student) => (
-            <div key={student._id} className="flex items-center space-x-4">
-              <input
-                type="checkbox"
+            <Space
+              key={student._id}
+              style={{ display: "flex", marginBottom: "10px" }}
+            >
+              <Checkbox
                 checked={attendanceData.students.some(
                   (att) => att.stdId === student._id && att.attendance
                 )}
                 onChange={() => handleAttendanceChange(student._id)}
-                className="h-4 w-4"
+                style={{ fontSize: "16px", padding: "5px" }}
               />
-              <label>{student.name}</label>
-            </div>
+              <span style={{ fontSize: "16px", color: "#555" }}>
+                {student.name}
+              </span>
+            </Space>
           ))}
-        </div>
+        </Form.Item>
 
-        {message && <p className="text-green-500">{message}</p>}
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          style={{
+            borderRadius: "10px",
+            backgroundColor: "#1890ff",
+            borderColor: "#1890ff",
+            padding: "12px 0",
+            fontSize: "16px",
+          }}
         >
           Submit Attendance
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 }
