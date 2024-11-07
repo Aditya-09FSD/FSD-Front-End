@@ -26,7 +26,7 @@ const Navs = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/achievments" element={<Achievements />} />
+          <Route path="/achievement" element={<Achievements />} />
           <Route path="/admissions" element={<Admission />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/privacy-policy" element={<Privacy />} />
