@@ -25,3 +25,18 @@ TODO: ->
     general
         profile page
             avatar - below details
+
+login pe role pucho
+
+user send login request -> api send token to user -> save token in cookies -> get token from cookies and getme or get my detials -> 
+display details -> 
+
+- teacher dashboard 
+        - profile 
+        - get my profile
+        
+        - record attendace
+- student dashboard 
+        - profile 
+
+        - subject wise attendace

@@ -15,7 +15,7 @@ router.get("/logout", authController.logout);
 // Protect all routes after this middle
 router.use(authController.protect);
 // router.patch("/updateMyPassword", authController.updatePassword);
-// router.get("/me", userController.getMe, userController.getUser);
+router.get("/me", userController.getMe, userController.getUser);
 // router.patch(
 //   "/updateMe",
 //   userController.uploadUserPhoto,
