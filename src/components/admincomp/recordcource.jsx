@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Input, Button, Select, message, Form } from "antd";
+import { Input, Button, message, Form } from "antd";
 import Swal from "sweetalert2";
-
-const { Option } = Select;
+import { apiurl } from "../../devdata/constants";
+import Cookies from "js-cookie";
 
 function RecordCourse() {
   const [courseData, setCourseData] = useState({
@@ -13,68 +13,38 @@ function RecordCourse() {
     specialization: "",
     num_of_panels: "",
     num_of_students: "",
-    subjects: [],
-    faculties: [],
   });
-  const [subjects, setSubjects] = useState([]);
-  const [teachers, setTeachers] = useState([]);
-
-  // Fetch subjects and teachers on component mount
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const response = await axios.get("/api/subjects");
-        setSubjects(response.data);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    };
-
-    const fetchTeachers = async () => {
-      try {
-        const response = await axios.get("/api/teachers");
-        setTeachers(response.data);
-      } catch (error) {
-        console.error("Error fetching teachers:", error);
-      }
-    };
-
-    fetchSubjects();
-    fetchTeachers();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCourseData({ ...courseData, [name]: value });
   };
 
-  const handleSubjectsChange = (value) => {
-    setCourseData({ ...courseData, subjects: value });
-  };
-
-  const handleFacultiesChange = (value) => {
-    setCourseData({ ...courseData, faculties: value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/courses", courseData);
-      Swal.fire({
-        icon: "success",
-        title: "Course Recorded Successfully!",
-        text: "The course data has been successfully saved.",
+      const token = Cookies.get("token");
+      const response = await axios.post(`${apiurl}/courses`, courseData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      setCourseData({
-        courseName: "",
-        branch: "",
-        year: "",
-        specialization: "",
-        num_of_panels: "",
-        num_of_students: "",
-        subjects: [],
-        faculties: [],
-      });
+
+      if (response.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Course Recorded Successfully!",
+          text: "The course data has been successfully saved.",
+        });
+        setCourseData({
+          courseName: "",
+          branch: "",
+          year: "",
+          specialization: "",
+          num_of_panels: "",
+          num_of_students: "",
+        });
+      }
     } catch (error) {
       message.error("Error recording course. Please try again.");
     }

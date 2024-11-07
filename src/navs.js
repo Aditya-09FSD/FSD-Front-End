@@ -10,7 +10,14 @@ import {
   ErrorPage,
 } from "./pages";
 import { useAuth } from "./context";
-import { About, Achievements, Admission, Contact, Footer } from "./components";
+import {
+  About,
+  Achievements,
+  Admission,
+  Contact,
+  Footer,
+  Privacy,
+} from "./components";
 const Navs = () => {
   const { isLoggedIn } = useAuth();
   return (
@@ -22,6 +29,7 @@ const Navs = () => {
           <Route path="/achievments" element={<Achievements />} />
           <Route path="/admissions" element={<Admission />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<Privacy />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} />

@@ -22,47 +22,63 @@ function RecordAttendance() {
     const fetchStudents = async () => {
       try {
         const token = Cookies.get("token");
-
         const response = await axios.get(`${apiurl}/students`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setStudents(response.data.data.data);
+        const fetchedStudents = response.data.data.data;
+
+        // Initialize students in attendanceData with default attendance set to false
+        setAttendanceData((prevData) => ({
+          ...prevData,
+          students: fetchedStudents.map((student) => ({
+            stdId: student._id,
+            attendance: false,
+          })),
+        }));
+        setStudents(fetchedStudents);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
-
     fetchStudents();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setAttendanceData({ ...attendanceData, [name]: value });
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubjectChange = (value) => {
-    setAttendanceData({ ...attendanceData, subject: value });
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      subject: value,
+    }));
   };
 
   const handleAttendanceChange = (stdId) => {
-    setAttendanceData((prevData) => {
-      const updatedStudents = prevData.students.map((student) =>
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      students: prevData.students.map((student) =>
         student.stdId === stdId
           ? { ...student, attendance: !student.attendance }
           : student
-      );
-      return { ...prevData, students: updatedStudents };
-    });
+      ),
+    }));
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
     try {
-      const response = await axios.post(
-        "/api/Models/AttendanceModel",
-        attendanceData
-      );
+      const token = Cookies.get("token");
+      await axios.post(`${apiurl}/attendance`, attendanceData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       Swal.fire({
         title: "Success!",
         text: "Attendance recorded successfully!",
@@ -75,7 +91,10 @@ function RecordAttendance() {
       setAttendanceData({
         date: "",
         subject: "",
-        students: [],
+        students: students.map((student) => ({
+          stdId: student._id,
+          attendance: false,
+        })),
       });
     } catch (error) {
       Swal.fire({
@@ -129,7 +148,7 @@ function RecordAttendance() {
             onChange={handleSubjectChange}
             options={subjectArray.map((subjectOption) => ({
               value: subjectOption._id,
-              label: subjectOption.name, // Assuming subject has 'id' and 'name'
+              label: subjectOption.name,
             }))}
             placeholder="Select a subject"
             className="w-full mb-4"

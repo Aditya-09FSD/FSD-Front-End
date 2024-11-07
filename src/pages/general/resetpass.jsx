@@ -17,6 +17,7 @@ function ResetPassword() {
       const response = await axios.post("/api/users/resetPassword", {
         username,
       });
+      console.log(response.data);
 
       // Show success message using SweetAlert
       await Swal.fire({

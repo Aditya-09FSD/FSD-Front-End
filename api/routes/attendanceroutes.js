@@ -10,7 +10,7 @@ router
   .route("/")
   .get(attendanceController.getAllAttendances)
   .post(
-    authController.restrictTo("admin"),
+    authController.restrictTo("admin", "teacher"),
     attendanceController.createAttendance
   );
 
