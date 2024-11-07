@@ -14,5 +14,3 @@ export { default as Attendance } from "./teachercomp/recordattendance";
 export { default as Subjects } from "./admincomp/recordsubject";
 export { default as Courses } from "./admincomp/recordcource";
 export { default as Panel } from "./admincomp/recordpanel";
-export { default as Teachers } from "./admincomp/recordteacher";
-export { default as Student } from "./admincomp/recordstudent";

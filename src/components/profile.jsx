@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context"; // Import the context
 import { apiurl } from "../devdata/constants"; // Import the API URL
 import { Loading } from "./";
-import Cookies from "js-cookie"; // Import Cookies to read from cookies
+import Cookies from "js-cookie";
 
 const Profile = () => {
   const { userData, isLoggedIn, setUserData } = useAuth(); // Get user data from context

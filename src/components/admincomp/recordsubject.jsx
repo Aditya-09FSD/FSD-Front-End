@@ -1,51 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import { Input, Button, Select, Form, message } from "antd"; // Import Ant Design components
+import { useAuth } from "../../context";
+import { apiurl } from "../../devdata/constants";
+import Cookies from "js-cookie";
 
 function RecordSubject() {
-  const [courses, setCourses] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    course: "",
-    units: [""],
-    lectures: [""],
-  });
+  const [form] = Form.useForm(); // Form instance for Ant Design Form
   const [isCardVisible, setIsCardVisible] = useState(true); // State to control visibility of the card
+  const { courses, loadingCourses } = useAuth();
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await axios.get("/api/courses");
-        setCourses(res.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-    fetchCourses();
-  }, []);
+  const [loadingSubmit, setLoadingSubmit] = useState(false); // Track loading state for submission
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleArrayChange = (e, index, field) => {
-    const newArray = [...form[field]];
-    newArray[index] = e.target.value;
-    setForm({ ...form, [field]: newArray });
-  };
-
-  const addArrayField = (field) => {
-    setForm({ ...form, [field]: [...form[field], ""] });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
+    setLoadingSubmit(true); // Set loading state while submitting
     try {
-      await axios.post("/api/subjects", form);
-      alert("Subject data saved successfully");
-      setForm({ name: "", course: "", units: [""], lectures: [""] });
+      const token = Cookies.get("token");
+      await axios.post(`${apiurl}/subjects`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      message.success("Subject data saved successfully"); // Use Ant Design message for success
+      form.resetFields(); // Reset the form fields after successful submission
     } catch (error) {
       console.error("Error submitting form:", error);
+      message.error(
+        "There was an issue saving the subject data. Please try again."
+      ); // Use Ant Design message for error
+    } finally {
+      setLoadingSubmit(false); // Reset loading state after submission
     }
   };
 
@@ -69,94 +53,186 @@ function RecordSubject() {
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Record Subject
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Subject Name:
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200 focus:outline-none"
-            />
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Course:
-            </label>
-            <select
-              name="course"
-              value={form.course}
-              onChange={handleChange}
-              required
-              className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200 focus:outline-none"
-            >
-              <option value="">Select Course</option>
-              {courses.map((course) => (
-                <option key={course._id} value={course._id}>
-                  {course.courseName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Units:
-            </label>
-            {form.units.map((unit, index) => (
-              <div key={index} className="mb-2 flex">
-                <input
-                  type="text"
-                  value={unit}
-                  onChange={(e) => handleArrayChange(e, index, "units")}
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => addArrayField("units")}
-                  className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-                >
-                  +
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Lectures:
-            </label>
-            {form.lectures.map((lecture, index) => (
-              <div key={index} className="mb-2 flex">
-                <input
-                  type="text"
-                  value={lecture}
-                  onChange={(e) => handleArrayChange(e, index, "lectures")}
-                  className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => addArrayField("lectures")}
-                  className="ml-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-                >
-                  +
-                </button>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full p-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition duration-200"
+        {/* Form */}
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          initialValues={{
+            name: "",
+            course: "",
+            units: [""],
+            lectures: [""],
+          }}
+        >
+          {/* Subject Name */}
+          <Form.Item
+            name="name"
+            label="Subject Name"
+            rules={[
+              { required: true, message: "Please enter the subject name!" },
+            ]}
           >
-            Submit
-          </button>
-        </form>
+            <Input
+              placeholder="Enter subject name"
+              allowClear
+              disabled={loadingSubmit}
+            />
+          </Form.Item>
+
+          {/* Course Selection */}
+          <Form.Item
+            name="course"
+            label="Course"
+            rules={[{ required: true, message: "Please select a course!" }]}
+          >
+            <Select
+              placeholder="Select course"
+              loading={loadingCourses}
+              allowClear
+              disabled={loadingSubmit}
+            >
+              {loadingCourses ? (
+                <Select.Option value="">Loading...</Select.Option>
+              ) : (
+                courses.map((course) => (
+                  <Select.Option key={course._id} value={course._id}>
+                    {course.courseName}
+                  </Select.Option>
+                ))
+              )}
+            </Select>
+          </Form.Item>
+
+          {/* Units */}
+          <Form.List
+            name="units"
+            initialValue={[""]}
+            rules={[
+              {
+                validator: async (_, units) => {
+                  if (!units || units.length < 1) {
+                    return Promise.reject(
+                      new Error("At least one unit is required")
+                    );
+                  }
+                },
+              },
+            ]}
+          >
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, fieldKey, name, field }, index) => (
+                  <div key={key} className="mb-2 flex">
+                    <Form.Item
+                      {...field}
+                      name={[name, "unit"]}
+                      fieldKey={[fieldKey, "unit"]}
+                      rules={[
+                        { required: true, message: "Please enter a unit!" },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Enter unit"
+                        allowClear
+                        disabled={loadingSubmit}
+                      />
+                    </Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      icon={<span className="material-icons">add</span>}
+                      disabled={loadingSubmit}
+                    >
+                      Add Unit
+                    </Button>
+                    {fields.length > 1 && (
+                      <Button
+                        type="link"
+                        onClick={() => remove(name)}
+                        icon={<span className="material-icons">remove</span>}
+                        disabled={loadingSubmit}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </Form.List>
+
+          {/* Lectures */}
+          <Form.List
+            name="lectures"
+            initialValue={[""]}
+            rules={[
+              {
+                validator: async (_, lectures) => {
+                  if (!lectures || lectures.length < 1) {
+                    return Promise.reject(
+                      new Error("At least one lecture is required")
+                    );
+                  }
+                },
+              },
+            ]}
+          >
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, fieldKey, name, field }, index) => (
+                  <div key={key} className="mb-2 flex">
+                    <Form.Item
+                      {...field}
+                      name={[name, "lecture"]}
+                      fieldKey={[fieldKey, "lecture"]}
+                      rules={[
+                        { required: true, message: "Please enter a lecture!" },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Enter lecture"
+                        allowClear
+                        disabled={loadingSubmit}
+                      />
+                    </Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      icon={<span className="material-icons">add</span>}
+                      disabled={loadingSubmit}
+                    >
+                      Add Lecture
+                    </Button>
+                    {fields.length > 1 && (
+                      <Button
+                        type="link"
+                        onClick={() => remove(name)}
+                        icon={<span className="material-icons">remove</span>}
+                        disabled={loadingSubmit}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </>
+            )}
+          </Form.List>
+
+          {/* Submit Button */}
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              loading={loadingSubmit}
+            >
+              {loadingSubmit ? "Submitting..." : "Submit"}
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );

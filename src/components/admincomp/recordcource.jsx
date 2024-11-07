@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Input, Button, Select, message, Form } from "antd";
+import Swal from "sweetalert2";
+
+const { Option } = Select;
 
 function RecordCourse() {
   const [courseData, setCourseData] = useState({
@@ -14,13 +18,12 @@ function RecordCourse() {
   });
   const [subjects, setSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  const [message, setMessage] = useState(null);
 
   // Fetch subjects and teachers on component mount
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get("/api/subjects"); // Adjust API path as needed
+        const response = await axios.get("/api/subjects");
         setSubjects(response.data);
       } catch (error) {
         console.error("Error fetching subjects:", error);
@@ -29,7 +32,7 @@ function RecordCourse() {
 
     const fetchTeachers = async () => {
       try {
-        const response = await axios.get("/api/teachers"); // Adjust API path as needed
+        const response = await axios.get("/api/teachers");
         setTeachers(response.data);
       } catch (error) {
         console.error("Error fetching teachers:", error);
@@ -45,29 +48,23 @@ function RecordCourse() {
     setCourseData({ ...courseData, [name]: value });
   };
 
-  const handleSubjectsChange = (e) => {
-    const { options } = e.target;
-    const selectedSubjects = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    setCourseData({ ...courseData, subjects: selectedSubjects });
+  const handleSubjectsChange = (value) => {
+    setCourseData({ ...courseData, subjects: value });
   };
 
-  const handleFacultiesChange = (e) => {
-    const { options } = e.target;
-    const selectedFaculties = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-
-    setCourseData({ ...courseData, faculties: selectedFaculties });
+  const handleFacultiesChange = (value) => {
+    setCourseData({ ...courseData, faculties: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/courses", courseData); // Adjust API path as needed
-      setMessage("Course recorded successfully!");
+      const response = await axios.post("/api/courses", courseData);
+      Swal.fire({
+        icon: "success",
+        title: "Course Recorded Successfully!",
+        text: "The course data has been successfully saved.",
+      });
       setCourseData({
         courseName: "",
         branch: "",
@@ -79,145 +76,82 @@ function RecordCourse() {
         faculties: [],
       });
     } catch (error) {
-      setMessage("Error recording course. Please try again.");
+      message.error("Error recording course. Please try again.");
     }
   };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
       <h2 className="text-2xl font-bold mb-4 text-center">Record Course</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Course Name
-          </label>
-          <input
+      <Form onSubmit={handleSubmit} layout="vertical" className="space-y-6">
+        <Form.Item label="Course Name" required>
+          <Input
             type="text"
             name="courseName"
             value={courseData.courseName}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter course name"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Branch
-          </label>
-          <input
+        <Form.Item label="Branch" required>
+          <Input
             type="text"
             name="branch"
             value={courseData.branch}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter branch name"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Year
-          </label>
-          <input
+        <Form.Item label="Year" required>
+          <Input
             type="text"
             name="year"
             value={courseData.year}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter year"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Specialization
-          </label>
-          <input
+        <Form.Item label="Specialization" required>
+          <Input
             type="text"
             name="specialization"
             value={courseData.specialization}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter specialization"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Number of Panels
-          </label>
-          <input
+        <Form.Item label="Number of Panels" required>
+          <Input
             type="number"
             name="num_of_panels"
             value={courseData.num_of_panels}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter number of panels"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Number of Students
-          </label>
-          <input
+        <Form.Item label="Number of Students" required>
+          <Input
             type="number"
             name="num_of_students"
             value={courseData.num_of_students}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter number of students"
           />
-        </div>
+        </Form.Item>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Subjects
-          </label>
-          <select
-            name="subjects"
-            multiple
-            value={courseData.subjects}
-            onChange={handleSubjectsChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          >
-            {subjects.map((subject) => (
-              <option key={subject._id} value={subject._id}>
-                {subject.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Faculties
-          </label>
-          <select
-            name="faculties"
-            multiple
-            value={courseData.faculties}
-            onChange={handleFacultiesChange}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          >
-            {teachers.map((teacher) => (
-              <option key={teacher._id} value={teacher._id}>
-                {teacher.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {message && <p className="text-green-500">{message}</p>}
-
-        <button
-          type="submit"
+        <Button
+          type="primary"
+          htmlType="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
         >
           Submit Course
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 }

@@ -1,47 +1,66 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Select, Input, Button, Form, Space } from "antd";
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { apiurl } from "../../devdata/constants";
+import { useAuth } from "../../context";
+import Cookies from "js-cookie";
 
 function RecordPanel() {
   const [students, setStudents] = useState([]);
-  const [courses, setCourses] = useState([]);
   const [teachers, setTeachers] = useState([]);
-  const [subjects, setSubjects] = useState([]);
   const [form, setForm] = useState({
     selectedStudents: [],
     course: "",
     selectedTeachers: [],
     timetable: [{ subject: "", teacher: "", location: "", timing: "" }],
   });
+  const { courses, subjectArray } = useAuth();
 
+  // Fetch data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentsRes = await axios.get("/api/students");
-        const coursesRes = await axios.get("/api/courses");
-        const teachersRes = await axios.get("/api/teachers");
-        const subjectsRes = await axios.get("/api/subjects");
+        const token = Cookies.get("token");
 
-        setStudents(studentsRes.data);
-        setCourses(coursesRes.data);
-        setTeachers(teachersRes.data);
-        setSubjects(subjectsRes.data);
+        const studentsRes = await axios.get(
+          `${apiurl}/students`,
+
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const teachersRes = await axios.get(
+          `${apiurl}/teachers`,
+
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setStudents(studentsRes.data.data.data);
+        setTeachers(teachersRes.data.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        Swal.fire({
+          title: "Error",
+          text: "There was an issue fetching data. Please try again.",
+          icon: "error",
+          confirmButtonText: "Okay",
+        });
       }
     };
     fetchData();
   }, []);
 
-  const handleFormChange = (e, index, field) => {
-    if (field === "timetable") {
+  // Handle form field changes
+  const handleFormChange = (value, name, index) => {
+    if (name === "timetable") {
       const newTimetable = [...form.timetable];
-      newTimetable[index][e.target.name] = e.target.value;
+      newTimetable[index][value.name] = value.value;
       setForm({ ...form, timetable: newTimetable });
     } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
+      setForm({ ...form, [name]: value });
     }
   };
 
+  // Add a new timetable entry
   const addTimetableEntry = () => {
     setForm({
       ...form,
@@ -52,16 +71,30 @@ function RecordPanel() {
     });
   };
 
+  // Remove a timetable entry
   const removeTimetableEntry = (index) => {
     const newTimetable = form.timetable.filter((_, i) => i !== index);
     setForm({ ...form, timetable: newTimetable });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/panels", form);
-      alert("Panel data saved successfully");
+      const token = Cookies.get("token");
+
+      await axios.post(
+        `${apiurl}/panels`,
+        form,
+
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      Swal.fire({
+        title: "Success!",
+        text: "Panel data saved successfully",
+        icon: "success",
+        confirmButtonText: "Okay",
+      });
       setForm({
         selectedStudents: [],
         course: "",
@@ -70,6 +103,12 @@ function RecordPanel() {
       });
     } catch (error) {
       console.error("Error submitting form:", error);
+      Swal.fire({
+        title: "Error",
+        text: "There was an issue submitting the form. Please try again.",
+        icon: "error",
+        confirmButtonText: "Okay",
+      });
     }
   };
 
@@ -79,156 +118,137 @@ function RecordPanel() {
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
           Record Panel
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">
-              Course:
-            </label>
-            <select
-              name="course"
+        <Form onFinish={handleSubmit} layout="vertical" className="space-y-6">
+          {/* Course Selection */}
+          <Form.Item label="Course" name="course" required>
+            <Select
               value={form.course}
-              onChange={(e) => handleFormChange(e)}
-              className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200"
-            >
-              <option value="">Select Course</option>
-              {courses.map((course) => (
-                <option key={course._id} value={course._id}>
-                  {course.courseName}
-                </option>
-              ))}
-            </select>
-          </div>
+              onChange={(value) => handleFormChange(value, "course")}
+              placeholder="Select Course"
+              options={courses.map((course) => ({
+                value: course._id,
+                label: course.courseName,
+              }))}
+            />
+          </Form.Item>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">
-              Students:
-            </label>
-            <select
-              multiple
-              name="selectedStudents"
+          {/* Students Selection */}
+          <Form.Item label="Students" name="selectedStudents" required>
+            <Select
+              mode="multiple"
               value={form.selectedStudents}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  selectedStudents: Array.from(
-                    e.target.selectedOptions,
-                    (option) => option.value
-                  ),
-                })
-              }
-              className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200"
-            >
-              {students.map((student) => (
-                <option key={student._id} value={student._id}>
-                  {student.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              onChange={(value) => handleFormChange(value, "selectedStudents")}
+              placeholder="Select Students"
+              options={students.map((student) => ({
+                value: student._id,
+                label: student.name,
+              }))}
+            />
+          </Form.Item>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">
-              Teachers:
-            </label>
-            <select
-              multiple
-              name="selectedTeachers"
+          {/* Teachers Selection */}
+          <Form.Item label="Teachers" name="selectedTeachers" required>
+            <Select
+              mode="multiple"
               value={form.selectedTeachers}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  selectedTeachers: Array.from(
-                    e.target.selectedOptions,
-                    (option) => option.value
-                  ),
-                })
-              }
-              className="border border-gray-300 rounded-lg p-2 w-full focus:ring focus:ring-blue-200"
-            >
-              {teachers.map((teacher) => (
-                <option key={teacher._id} value={teacher._id}>
-                  {teacher.name}
-                </option>
-              ))}
-            </select>
-          </div>
+              onChange={(value) => handleFormChange(value, "selectedTeachers")}
+              placeholder="Select Teachers"
+              options={teachers.map((teacher) => ({
+                value: teacher._id,
+                label: teacher.name,
+              }))}
+            />
+          </Form.Item>
 
-          <div>
-            <label className="block font-semibold text-gray-700 mb-2">
-              Timetable:
-            </label>
+          {/* Timetable Entries */}
+          <Form.Item label="Timetable" required>
             {form.timetable.map((entry, index) => (
-              <div
-                key={index}
-                className="border border-gray-200 p-4 rounded-lg mb-4"
-              >
-                <select
-                  name="subject"
-                  value={entry.subject}
-                  onChange={(e) => handleFormChange(e, index, "timetable")}
-                  className="border border-gray-300 rounded-lg p-2 mr-2 w-full focus:ring focus:ring-blue-200"
-                >
-                  <option value="">Select Subject</option>
-                  {subjects.map((subject) => (
-                    <option key={subject._id} value={subject._id}>
-                      {subject.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="teacher"
-                  value={entry.teacher}
-                  onChange={(e) => handleFormChange(e, index, "timetable")}
-                  className="border border-gray-300 rounded-lg p-2 mr-2 w-full focus:ring focus:ring-blue-200"
-                >
-                  <option value="">Select Teacher</option>
-                  {teachers.map((teacher) => (
-                    <option key={teacher._id} value={teacher._id}>
-                      {teacher.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Location"
-                  value={entry.location}
-                  onChange={(e) => handleFormChange(e, index, "timetable")}
-                  className="border border-gray-300 rounded-lg p-2 mr-2 w-full focus:ring focus:ring-blue-200"
-                />
-                <input
-                  type="text"
-                  name="timing"
-                  placeholder="Timing"
-                  value={entry.timing}
-                  onChange={(e) => handleFormChange(e, index, "timetable")}
-                  className="border border-gray-300 rounded-lg p-2 mr-2 w-full focus:ring focus:ring-blue-200"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeTimetableEntry(index)}
-                  className="text-red-500 mt-2"
-                >
-                  Remove
-                </button>
+              <div key={index} className="mb-4">
+                <Space size="middle">
+                  Subject
+                  <Select
+                    name="subject"
+                    value={entry.subject}
+                    onChange={(value) =>
+                      handleFormChange(
+                        { name: "subject", value },
+                        "timetable",
+                        index
+                      )
+                    }
+                    placeholder="Select Subject"
+                    options={subjectArray.map((subject) => ({
+                      value: subject._id,
+                      label: subject.name,
+                    }))}
+                    className="w-1/4"
+                  />
+                  Teacher
+                  <Select
+                    name="teacher"
+                    value={entry.teacher}
+                    onChange={(value) =>
+                      handleFormChange(
+                        { name: "teacher", value },
+                        "timetable",
+                        index
+                      )
+                    }
+                    placeholder="Select Teacher"
+                    options={teachers.map((teacher) => ({
+                      value: teacher._id,
+                      label: teacher.name,
+                    }))}
+                    className="w-1/4"
+                  />
+                  Location
+                  <Input
+                    name="location"
+                    value={entry.location}
+                    onChange={(e) =>
+                      handleFormChange(
+                        { name: "location", value: e.target.value },
+                        "timetable",
+                        index
+                      )
+                    }
+                    placeholder="Location"
+                    className="w-1/4"
+                  />
+                  Timmings
+                  <Input
+                    name="timing"
+                    value={entry.timing}
+                    onChange={(e) =>
+                      handleFormChange(
+                        { name: "timing", value: e.target.value },
+                        "timetable",
+                        index
+                      )
+                    }
+                    placeholder="Timing"
+                    className="w-1/4"
+                  />
+                  <Button
+                    type="danger"
+                    onClick={() => removeTimetableEntry(index)}
+                    icon="delete"
+                  >
+                    Remove
+                  </Button>
+                </Space>
               </div>
             ))}
-            <button
-              type="button"
-              onClick={addTimetableEntry}
-              className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
-            >
+            <Button type="primary" onClick={addTimetableEntry}>
               Add Timetable Entry
-            </button>
-          </div>
+            </Button>
+          </Form.Item>
 
-          <button
-            type="submit"
-            className="w-full p-3 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600"
-          >
+          {/* Submit Button */}
+          <Button type="primary" htmlType="submit" className="w-full">
             Submit
-          </button>
-        </form>
+          </Button>
+        </Form>
       </div>
     </div>
   );
