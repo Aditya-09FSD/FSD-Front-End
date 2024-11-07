@@ -8,7 +8,7 @@ router.use(authController.protect);
 
 router
   .route("/")
-  .get(studentController.getAllStudents)
+  .get(authController.restrictTo("teacher"), studentController.getAllStudents)
   .post(authController.restrictTo("admin"), studentController.createStudent);
 
 router

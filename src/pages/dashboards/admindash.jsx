@@ -1,12 +1,10 @@
 import React from "react";
-import { Student, Panel, Courses, Teachers, Subjects } from "../../components";
+import { Panel, Courses, Subjects } from "../../components";
 
 const Admindash = () => {
   return (
     <>
-      <Student />
       <Panel />
-      <Teachers />
       <Subjects />
       <Courses />
     </>

@@ -2,6 +2,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const APIFeatures = require("../utils/apiFeatures");
 const User = require("../models/userModel");
+const Student = require("../models/studentModel");
+const Teacher = require("../models/teacherModel");
 const { promisify } = require("util");
 const jwt = require("jsonwebtoken");
 
@@ -71,7 +73,19 @@ exports.getOne = (Model, popOptions) =>
     if (!doc) {
       return next(new AppError("No document found with that ID", 404));
     }
-
+    if (doc.role === "student") {
+      const student = await Student.findById(doc.roleid);
+      if (student) {
+        // Add student details to the current doc
+        doc.studentDetails = student;
+      }
+    } else if (doc.role === "teacher") {
+      const teacher = await Teacher.findById(doc.roleid);
+      if (teacher) {
+        // Add teacher details to the current doc
+        doc.teacherDetails = teacher;
+      }
+    }
     res.status(200).json({
       status: "success",
       data: {
@@ -82,15 +96,7 @@ exports.getOne = (Model, popOptions) =>
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    let filter = {};
-    if (req.params.tourId) filter = { tour: req.params.tourId };
-
-    const features = new APIFeatures(Model.find(filter), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const doc = await features.query;
+    const doc = await Model.find();
 
     res.status(200).json({
       status: "success",

@@ -4,7 +4,6 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
-router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 // router.get("/isloggedin", authController.isLoggedIn);
@@ -25,6 +24,7 @@ router.get("/me", userController.getMe, userController.getUser);
 // router.delete("/deleteMe", userController.deleteMe);
 
 router.use(authController.restrictTo("admin"));
+router.post("/signup", authController.signup);
 
 router
   .route("/")

@@ -1,7 +1,12 @@
 import React from "react";
+import { Navbar } from "../";
 
 const Admission = () => {
-  return <div></div>;
+  return (
+    <>
+      <Navbar />
+    </>
+  );
 };
 
 export default Admission;

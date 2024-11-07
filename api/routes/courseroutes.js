@@ -3,12 +3,12 @@ const courseController = require("../controllers/courseController");
 const authController = require("../controllers/authController");
 
 const router = express.Router();
-
+router.route("/").get(courseController.getAllCourses);
 router.use(authController.protect);
 
 router
   .route("/")
-  .get(courseController.getAllCourses)
+
   .post(authController.restrictTo("admin"), courseController.createCourse);
 
 router

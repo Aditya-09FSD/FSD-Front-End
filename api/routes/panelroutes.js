@@ -3,12 +3,11 @@ const panelController = require("../controllers/panelController");
 const authController = require("../controllers/authController");
 
 const router = express.Router();
-
+router.route("/").get(panelController.getAllPanels);
 router.use(authController.protect);
 
 router
   .route("/")
-  .get(panelController.getAllPanels)
   .post(authController.restrictTo("admin"), panelController.createPanel);
 
 router

@@ -1,6 +1,7 @@
 export { default as Footer } from "./Footer";
 export { default as Navbar } from "./Navbar";
 export { default as Loading } from "./loading";
+export { default as Profile } from "./profile";
 
 export { default as Hero } from "./homecomp/Hero";
 export { default as About } from "./homecomp/About";
