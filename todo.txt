@@ -6,6 +6,9 @@ home page -
     achievements
     login
 
+login page
+signup page
+
 crm inside -
     teachers side
         dashboard
