@@ -7,6 +7,8 @@ import {
   AdminDash,
   StudentDash,
   TeachDash,
+  Reset,
+  ErrorPage,
 } from "./pages";
 import { Navbar } from "./components";
 
@@ -15,12 +17,14 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="*" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<AdminDash />} />
         <Route path="/student" element={<StudentDash />} />
         <Route path="/teacher" element={<TeachDash />} />
+        <Route path="/reset" element={<Reset />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );

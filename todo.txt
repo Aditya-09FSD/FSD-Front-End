@@ -1,15 +1,18 @@
 conversion to react
-home page -
+home page - ok
     about page
     contact
     admissions
     achievements
     login
 
-login page
-signup page
+login page - ok
+signup page - ok
 
-crm inside -
+TODO: ->
+0. Better Frontend
+1. Connect to actual api
+2. crm inside -
     teachers side
         dashboard
         attendace screen
