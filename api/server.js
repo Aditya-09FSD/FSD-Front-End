@@ -11,7 +11,7 @@ dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
 const api = require("./api");
 
-const DB = process.env.DATABASE1.replace(
+const DB = process.env.DATABASE.replace(
   "<password>",
   process.env.DATABASE_PASSWORD
 );

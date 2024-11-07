@@ -1,0 +1,1 @@
+export { apiurl } from "./envs";

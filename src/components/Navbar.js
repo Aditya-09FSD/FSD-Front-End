@@ -79,7 +79,7 @@ function Navbar() {
         </div>
 
         {/* Hamburger Icon for Record Links - Fixed on Right */}
-        <div className="relative">
+        {/* <div className="relative">
           <button
             onClick={toggleRecordMenu}
             className="text-white hover:text-yellow-400 transition-all"
@@ -99,9 +99,9 @@ function Navbar() {
               />
             </svg>
           </button>
-
-          {/* Record Links Dropdown */}
-          {isRecordMenuOpen && (
+*/}
+        {/* Record Links Dropdown */}
+        {/* {isRecordMenuOpen && (
             <div className="absolute top-12 right-0 bg-gray-700 p-4 rounded-md space-y-2 text-white">
               <Link to="/admin" className="block hover:text-yellow-400">
                 Admin Dashboard
@@ -117,8 +117,8 @@ function Navbar() {
                 Student Dashboard
               </Link>
             </div>
-          )}
-        </div>
+          )} */}
+        {/* </div>  */}
       </div>
     </nav>
   );
