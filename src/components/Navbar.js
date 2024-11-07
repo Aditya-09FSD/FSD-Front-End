@@ -41,25 +41,25 @@ function Navbar() {
             Home
           </a>
           <a
-            href="#"
+            href="/about"
             className="text-white hover:text-yellow-400 transition-all"
           >
             About
           </a>
           <a
-            href="#"
+            href="/achievments"
             className="text-white hover:text-yellow-400 transition-all"
           >
             Achievements
           </a>
           <a
-            href="#"
+            href="/admissions"
             className="text-white hover:text-yellow-400 transition-all"
           >
             Admissions
           </a>
           <a
-            href="#"
+            href="/contact"
             className="text-white hover:text-yellow-400 transition-all"
           >
             Contact

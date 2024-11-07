@@ -10,7 +10,7 @@ import {
   Reset,
   ErrorPage,
 } from "./pages";
-import { Navbar } from "./components";
+import { Navbar, About, Achievements, Admission, Contact } from "./components";
 
 function App() {
   return (
@@ -18,6 +18,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/achievments" element={<Achievements />} />
+        <Route path="/admissions" element={<Admission />} />
+        <Route path="/contact" element={<Contact />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<AdminDash />} />

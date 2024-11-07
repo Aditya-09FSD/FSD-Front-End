@@ -1,9 +1,14 @@
-export { default as About } from "./About";
 export { default as Hero } from "./Hero";
 export { default as Footer } from "./Footer";
 export { default as Navbar } from "./Navbar";
-export { default as Achievements } from "./Achievement";
+
+export { default as About } from "./homecomp/About";
+export { default as Achievements } from "./homecomp/Achievement";
+export { default as Admission } from "./homecomp/Admission";
+export { default as Contact } from "./homecomp/Contact";
+
 export { default as Attendance } from "./teachercomp/recordattendance";
+
 export { default as Subjects } from "./admincomp/recordsubject";
 export { default as Courses } from "./admincomp/recordcource";
 export { default as Panel } from "./admincomp/recordpanel";
