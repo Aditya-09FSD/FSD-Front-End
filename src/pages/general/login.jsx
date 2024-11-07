@@ -5,8 +5,11 @@ import { Loading } from "../../components";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import Swal from "sweetalert2"; // Import SweetAlert2
+import { useAuth } from "../../context";
 
 function Login() {
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     username: "akashpatelyo2@gmail.com",
     password: "akashpatel",
@@ -31,7 +34,7 @@ function Login() {
       if (response.data.token) {
         // Store the token in cookies
         Cookies.set("token", response.data.token, { expires: 7 });
-
+        login();
         // Show success alert using SweetAlert
         await Swal.fire({
           title: "Login Successful!",

@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "antd";
+import axios from "axios";
+import { useAuth } from "../context";
 
 function Navbar() {
   const [isMenuVisible, setIsMenuVisible] = useState(true);
   const [isRecordMenuOpen, setIsRecordMenuOpen] = useState(false);
+  const { logout, isLoggedIn } = useAuth();
 
   const handleTitleClick = () => {
     setIsMenuVisible(!isMenuVisible);
@@ -64,18 +68,27 @@ function Navbar() {
           >
             Contact
           </a>
-          <Link
-            to="/signup"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Signup
-          </Link>
-          <Link
-            to="/login"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Login
-          </Link>
+
+          {!isLoggedIn ? (
+            <>
+              <Link
+                to="/signup"
+                className="text-white hover:text-yellow-400 transition-all"
+              >
+                Signup
+              </Link>
+              <Link
+                to="/login"
+                className="text-white hover:text-yellow-400 transition-all"
+              >
+                Login
+              </Link>
+            </>
+          ) : (
+            <Button onClick={() => logout()} danger>
+              Loggout
+            </Button>
+          )}
         </div>
 
         {/* Hamburger Icon for Record Links - Fixed on Right */}
