@@ -130,6 +130,16 @@ const Studentdash = () => {
             >
               <RecentActs activities={userData?.activities || []} />
             </TabPane>
+            <TabPane
+              tab={
+                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                  Course
+                </span>
+              }
+              key="4"
+            >
+              <RecentActs activities={userData?.activities || []} />
+            </TabPane>
           </Tabs>
         </div>
       </Content>
