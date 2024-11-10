@@ -312,6 +312,7 @@ function Signup() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  maxLength={10}
                 />
               </Form.Item>
               <Form.Item
@@ -488,6 +489,7 @@ function Signup() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  maxLength={10}
                 />
               </Form.Item>
               <Form.Item
