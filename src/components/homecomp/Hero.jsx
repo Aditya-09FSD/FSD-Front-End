@@ -7,7 +7,7 @@ import styled from "styled-components";
 const ArrowButton = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
-  font-size: 30px;
+  font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,21 +27,25 @@ const ArrowButton = styled.div`
 const Hero = () => {
   return (
     <section
-      className="h-screen bg-cover bg-center flex flex-col items-center justify-center text-black"
+      className="h-screen bg-cover bg-center flex flex-col items-center justify-center text-black px-4"
       style={{
         backgroundImage: `url('https://wallpapers.com/images/featured/anime-school-background-dh3ommnxthw4nln7.jpg')`,
       }}
     >
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-white">Blue Bells Public School</h1>
-        <p className="mt-4 text-xl text-white">Nurturing Young Minds</p>
-        <p className="mt-2 text-white">
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+          Blue Bells Public School
+        </h1>
+        <p className="mt-2 sm:mt-4 text-lg sm:text-xl md:text-2xl text-white">
+          Nurturing Young Minds
+        </p>
+        <p className="mt-1 sm:mt-2 text-white text-sm sm:text-base">
           Discover a world of excellence at Blue Bells Public School, located in
           Sector 10, Gurugram.
         </p>
       </div>
 
-      <div className="w-full max-w-4xl relative">
+      <div className="w-full max-w-3xl lg:max-w-4xl relative">
         <Carousel
           autoplay
           infinite
@@ -56,7 +60,7 @@ const Hero = () => {
                 width: "100%",
                 height: "auto",
                 objectFit: "cover",
-                maxHeight: "500px",
+                maxHeight: "400px",
                 borderRadius: "10px",
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.1)",
                 border: "5px solid #fff",
@@ -72,7 +76,7 @@ const Hero = () => {
                 width: "100%",
                 height: "auto",
                 objectFit: "cover",
-                maxHeight: "500px",
+                maxHeight: "400px",
                 borderRadius: "10px",
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.1)",
                 border: "5px solid #fff",
@@ -88,7 +92,7 @@ const Hero = () => {
                 width: "100%",
                 height: "auto",
                 objectFit: "cover",
-                maxHeight: "500px",
+                maxHeight: "400px",
                 borderRadius: "10px",
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.1)",
                 border: "5px solid #fff",
@@ -104,7 +108,7 @@ const Hero = () => {
                 width: "100%",
                 height: "auto",
                 objectFit: "cover",
-                maxHeight: "500px",
+                maxHeight: "400px",
                 borderRadius: "10px",
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.1)",
                 border: "5px solid #fff",
