@@ -18,7 +18,7 @@ const ArrowButton = styled.div`
   top: 50%;
   z-index: 10;
   transform: translateY(-50%);
-  
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -34,14 +34,14 @@ const Hero = () => {
     >
       <div className="text-center mb-6 sm:mb-8">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-          Blue Bells Public School
+          Blue Bells Public College
         </h1>
         <p className="mt-2 sm:mt-4 text-lg sm:text-xl md:text-2xl text-white">
           Nurturing Young Minds
         </p>
         <p className="mt-1 sm:mt-2 text-white text-sm sm:text-base">
-          Discover a world of excellence at Blue Bells Public School, located in
-          Sector 10, Gurugram.
+          Discover a world of excellence at Blue Bells Public College, located
+          in Sector 10, Gurugram.
         </p>
       </div>
 
