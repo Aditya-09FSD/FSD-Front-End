@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "antd";
 import { useAuth } from "../context";
-import { LogoutOutlined, DashboardOutlined, LoginOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  DashboardOutlined,
+  LoginOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -39,10 +43,12 @@ function Navbar() {
         <h1
           onClick={handleTitleClick}
           className={`cursor-pointer text-xl font-semibold transition-all duration-700 transform ${
-            isMenuVisible ? "text-gray-400 translate-x-0" : "mx-auto text-white translate-x-0"
+            isMenuVisible
+              ? "text-gray-400 translate-x-0"
+              : "mx-auto text-white translate-x-0"
           }`}
         >
-          Blue Bells Public School
+          Blue Bells Public College
         </h1>
 
         <div
@@ -51,19 +57,34 @@ function Navbar() {
           }`}
         >
           <div className="flex space-x-4">
-            <Link to="/" className="text-white hover:text-yellow-400 transition-all">
+            <Link
+              to="/"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
               Home
             </Link>
-            <Link to="/about" className="text-white hover:text-yellow-400 transition-all">
+            <Link
+              to="/about"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
               About
             </Link>
-            <Link to="/achievement" className="text-white hover:text-yellow-400 transition-all">
+            <Link
+              to="/achievement"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
               Achievements
             </Link>
-            <Link to="/admissions" className="text-white hover:text-yellow-400 transition-all">
+            <Link
+              to="/admissions"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
               Admissions
             </Link>
-            <Link to="/contact" className="text-white hover:text-yellow-400 transition-all">
+            <Link
+              to="/contact"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
               Contact
             </Link>
           </div>

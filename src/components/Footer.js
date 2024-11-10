@@ -5,17 +5,19 @@ function Footer() {
   return (
     <footer className="bg-gray-800 py-6 text-white">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
-        
         {/* Left Side - Privacy Policy and Copyright */}
         <div className="text-center md:text-left mb-4 md:mb-0">
           <p>
-            &copy; 2024 Blue Bells Public School.{" "}
-            <a href="/privacy-policy" className="text-yellow-400 hover:underline">
+            &copy; 2024 Blue Bells Public College.{" "}
+            <a
+              href="/privacy-policy"
+              className="text-yellow-400 hover:underline"
+            >
               Privacy Policy
             </a>
           </p>
         </div>
-        
+
         {/* Right Side - Social Media Icons */}
         <div className="flex space-x-4">
           <a
