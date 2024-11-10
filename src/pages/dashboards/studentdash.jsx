@@ -3,16 +3,21 @@ import { Tabs, Button, Layout, Typography } from "antd";
 import { LogoutOutlined, HomeFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
-import { Profile, Addash, RecentActs, CourseDet } from "../../components";
+import {
+  Profile,
+  Addash,
+  RecentActs,
+  CourseDet,
+  Timetable,
+} from "../../components";
 
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Studentdash = () => {
-  const { isLoggedIn, logout, userData } = useAuth();
+  const { isLoggedIn, logout, userData, userdet } = useAuth();
   const navigate = useNavigate();
-
   const tohome = () => {
     navigate("/");
   };
@@ -117,28 +122,38 @@ const Studentdash = () => {
               }
               key="2"
             >
-              <Addash subjects={userData?.subjects || []} />
+              <Addash subjectsAttendance={userdet?.subjectsAttendance || []} />
             </TabPane>
 
-            <TabPane
-              tab={
-                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-                  Recent Activities
-                </span>
-              }
-              key="3"
-            >
-              <RecentActs activities={userData?.activities || []} />
-            </TabPane>
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
                   Course
                 </span>
               }
+              key="3"
+            >
+              <CourseDet user={userData} userDetails={userdet} />
+            </TabPane>
+            <TabPane
+              tab={
+                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                  TimeTable
+                </span>
+              }
               key="4"
             >
-              <CourseDet />
+              <Timetable userDetails={userdet} />
+            </TabPane>
+            <TabPane
+              tab={
+                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                  Recent Activities
+                </span>
+              }
+              key="5"
+            >
+              <RecentActs activities={userData?.activities || []} />
             </TabPane>
           </Tabs>
         </div>

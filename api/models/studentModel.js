@@ -10,7 +10,8 @@ const StudentSchema = new mongoose.Schema({
     required: true,
   },
   panel: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Panel",
     required: true,
   },
   roll_no: {

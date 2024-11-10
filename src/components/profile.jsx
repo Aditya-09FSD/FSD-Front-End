@@ -6,7 +6,7 @@ import { Loading } from "./";
 import Cookies from "js-cookie";
 
 const Profile = () => {
-  const { userData, isLoggedIn, setUserData } = useAuth();
+  const { userData, isLoggedIn, setUserData, setUserDet } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const Profile = () => {
             console.log(response.data.data);
 
             setUserData(response.data.data.user);
+            setUserDet(response.data.data.userDetails);
             setLoading(false);
           })
           .catch((error) => {

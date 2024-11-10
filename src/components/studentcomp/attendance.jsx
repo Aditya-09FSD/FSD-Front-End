@@ -3,7 +3,7 @@ import { Table, Typography, Card } from "antd";
 
 const { Title } = Typography;
 
-const Attendance = ({ subjects }) => {
+const Attendance = ({ subjectsAttendance }) => {
   const columns = [
     {
       title: "Subject",
@@ -34,11 +34,12 @@ const Attendance = ({ subjects }) => {
     },
   ];
 
-  const data = subjects.map((subject) => ({
-    key: subject._id,
-    name: subject.name,
-    lecturesAttended: subject.lecturesAttended,
-    totalLectures: subject.totalLectures,
+  // Use subjectsAttendance to create the data source
+  const data = subjectsAttendance.map((subjectData) => ({
+    key: subjectData.subject._id,
+    name: subjectData.subject.name,
+    lecturesAttended: subjectData.attendanceStats.totalAttended,
+    totalLectures: subjectData.attendanceStats.totalLectures,
   }));
 
   return (

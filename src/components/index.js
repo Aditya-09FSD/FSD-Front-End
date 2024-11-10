@@ -19,3 +19,4 @@ export { default as Panel } from "./admincomp/recordpanel";
 export { default as Addash } from "./studentcomp/attendance.jsx";
 export { default as RecentActs } from "./studentcomp/recentaactivities.jsx";
 export { default as CourseDet } from "./studentcomp/coursedetails.jsx";
+export { default as Timetable } from "./studentcomp/timetable.jsx";

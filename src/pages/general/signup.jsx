@@ -3,7 +3,6 @@ import axios from "axios";
 import { apiurl } from "../../devdata/constants";
 import { Loading } from "../../components";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Tabs, Input, Button, Form, notification, Select } from "antd";
 import { useAuth } from "../../context";
@@ -25,7 +24,6 @@ function Signup() {
     role: "student",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const {
     courses,
@@ -35,11 +33,10 @@ function Signup() {
     subjectArray,
     loadingPanels,
     loadingSubjects,
-  } = useAuth(); // Fetch available courses, panels, and subjects from useAuth hook
+  } = useAuth();
 
   useEffect(() => {
     if (courses && courses.length > 0) {
-      // Set the first course as the default if courses are fetched
       setFormData((prevState) => ({
         ...prevState,
         course: courses[0].courseName, // Assuming courses contain 'courseName'

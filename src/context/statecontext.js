@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     return savedState === "true";
   });
   const [userData, setUserData] = useState();
+  const [userdet, setUserDet] = useState();
 
   const [role, setrole] = useState(() => {
     const savedState = localStorage.getItem("role");
@@ -121,11 +122,13 @@ export const AuthProvider = ({ children }) => {
         loadingSubjects,
         error,
         role,
+        userdet,
         login,
         logout,
         setUserData,
         setCourses,
         setrole,
+        setUserDet,
       }}
     >
       {children}
