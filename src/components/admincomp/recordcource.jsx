@@ -51,10 +51,11 @@ function RecordCourse() {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
+  const handleSubmitc = async () => {
     try {
       const token = Cookies.get("token");
-      await axios.put(`${apiurl}/courses/${selectedCourse}`, courseData, {
+
+      await axios.patch(`${apiurl}/courses/${selectedCourse}`, courseData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,6 +77,32 @@ function RecordCourse() {
       });
     } catch (error) {
       message.error("Error updating course. Please try again.");
+    }
+  };
+  const handleSubmit = async () => {
+    try {
+      const token = Cookies.get("token");
+      await axios.post(`${apiurl}/courses`, courseData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "Course Recorded Successfully!",
+        text: "The course data has been successfully saved.",
+      });
+      setCourseData({
+        courseName: "",
+        branch: "",
+        year: "",
+        specialization: "",
+        num_of_panels: "",
+        num_of_students: "",
+      });
+    } catch (error) {
+      message.error("Error recording course. Please try again.");
     }
   };
 
@@ -163,7 +190,7 @@ function RecordCourse() {
 
           <TabPane tab="Update Course" key="update">
             <Form
-              onFinish={handleSubmit}
+              onFinish={handleSubmitc}
               layout="vertical"
               className="space-y-6"
             >

@@ -10,7 +10,6 @@ const SubjectSchema = new mongoose.Schema({
     ref: "Course",
   },
   units: [String],
-  lectures: [String],
 });
 const Subject = mongoose.model("Subject", SubjectSchema);
 module.exports = Subject;
