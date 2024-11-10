@@ -239,11 +239,14 @@ function Signup() {
                     name="course"
                     value={formData.course}
                     onChange={handleCourseChange}
-                    options={courses.map((course) => ({
-                      value: course._id,
-                      label: course.courseName, // Assuming course has a 'courseName' property
-                    }))}
-                  />
+                  >
+                    {courses.map((course) => (
+                      <Select.Option key={course._id} value={course._id}>
+                        {course.year} {"Y "} {course.courseName} {course.branch}{" "}
+                        {course.specialization}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 )}
               </Form.Item>
 
@@ -329,6 +332,7 @@ function Signup() {
                     key={index}
                     className="border border-gray-200 p-4 rounded-lg mb-4"
                   >
+                    Subject
                     {loadingSubjects ? (
                       <div>Loading panels...</div>
                     ) : error ? (
@@ -346,6 +350,7 @@ function Signup() {
                       />
                     )}
                     <div className="mt-2">
+                      Panels
                       {subject.panels.map((panel, panelIndex) => (
                         <div
                           key={panelIndex}
@@ -360,14 +365,16 @@ function Signup() {
                           ) : (
                             <Select
                               name="panel"
+                              dropdownStyle={{ width: 100 }}
                               value={formData.panel}
                               onChange={(value) =>
                                 setFormData({ ...formData, panel: value })
                               }
                               options={panelArray.map((panel) => ({
-                                value: panel._id, // Assuming panel has 'id' and 'name'
+                                value: panel._id,
                                 label: panel.name,
                               }))}
+                              className="w-1/2"
                             />
                           )}
                           <button

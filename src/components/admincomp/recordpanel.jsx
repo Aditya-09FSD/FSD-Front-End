@@ -9,9 +9,9 @@ import { StopOutlined } from "@ant-design/icons";
 
 function RecordPanel() {
   const [form, setForm] = useState({
-    name: "", // Added name field
+    name: "",
     course: "",
-    timetable: [{ subject: "", location: "", timing: "", day: "" }], // Added day to the timetable structure
+    timetable: [{ subject: "", location: "", timing: "", day: "" }],
   });
   const { courses, subjectArray, loadingCourses } = useAuth();
   const [loading, setLoading] = useState(false);
