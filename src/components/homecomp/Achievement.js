@@ -13,7 +13,7 @@ function Achievements() {
 
           {/* Achievements Overview Section */}
           <p className="mt-6 text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            At Blue Bells Public College, we take pride in the remarkable
+            At Blue Bells Engineering College, we take pride in the remarkable
             achievements of our students and faculty. Our dedication to academic
             excellence, sports, extracurricular activities, and overall student
             development has earned us numerous accolades and honors over the

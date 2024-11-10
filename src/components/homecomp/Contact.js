@@ -54,7 +54,7 @@ const Contact = () => {
                 Our Address
               </h4>
               <p className="text-gray-600">
-                Blue Bells Public College <br />
+                Blue Bells Engineering College <br />
                 Sector 10, Gurugram <br />
                 Haryana, India
               </p>

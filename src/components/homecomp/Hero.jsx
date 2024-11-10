@@ -118,7 +118,7 @@ const Hero = () => {
       <BackgroundShape style={{ bottom: "15%", right: "10%" }} />
 
       {/* Titles */}
-      <Title>Blue Bells College</Title>
+      <Title>Blue Bells Engineering College</Title>
       <Subtitle>Nurturing Young Minds</Subtitle>
       <Subtitle>Located in Sector 10, Gurugram</Subtitle>
 

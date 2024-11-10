@@ -48,7 +48,7 @@ function Navbar() {
               : "mx-auto text-white translate-x-0"
           }`}
         >
-          Blue Bells College
+          Blue Bells Engineering College
         </h1>
 
         <div

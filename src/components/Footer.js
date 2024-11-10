@@ -8,7 +8,7 @@ function Footer() {
         {/* Left Side - Privacy Policy and Copyright */}
         <div className="text-center md:text-left mb-4 md:mb-0">
           <p>
-            &copy; 2024 Blue Bells Public College.{" "}
+            &copy; 2024 Blue Bells Engineering College.{" "}
             <a
               href="/privacy-policy"
               className="text-yellow-400 hover:underline"
