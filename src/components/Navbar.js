@@ -48,7 +48,7 @@ function Navbar() {
               : "mx-auto text-white translate-x-0"
           }`}
         >
-          Blue Bells Public College
+          Blue Bells College
         </h1>
 
         <div

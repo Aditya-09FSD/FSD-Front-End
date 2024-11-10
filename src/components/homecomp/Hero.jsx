@@ -37,7 +37,6 @@ const Subtitle = styled.p`
   font-size: 1.5rem;
   color: #37474f;
   margin: 0.5rem 0;
-  opacity: 0;
   animation: fadeInSlide 1.5s ease 0.5s forwards;
   text-align: center;
 `;
@@ -59,12 +58,12 @@ const CarouselContainer = styled.div`
   animation: ${floatBackground} 6s ease-in-out infinite;
   width: 100%;
   max-width: 700px;
-  padding: 20px; /* Space around carousel for cleaner look */
+  padding: 20px;
 `;
 
 // Carousel Slide Wrapper to add black background and padding
 const SlideWrapper = styled.div`
-  background-color: rgba(0, 0, 0, 0.7); /* Dark background instead of white */
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 15px;
   border-radius: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -95,7 +94,6 @@ const ArrowButton = styled.div`
   top: 50%;
   z-index: 20;
   transform: translateY(-50%);
-
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -105,23 +103,27 @@ const Hero = () => {
   return (
     <section
       style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
         backgroundImage: `url('https://wallpapers.com/images/featured/anime-school-background-dh3ommnxthw4nln7.jpg')`,
       }}
     >
-      <div className="text-center mb-6 sm:mb-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
-          Blue Bells Public School
-        </h1>
-        <p className="mt-2 sm:mt-4 text-lg sm:text-xl md:text-2xl text-white">
-          Nurturing Young Minds
-        </p>
-        <p className="mt-1 sm:mt-2 text-white text-sm sm:text-base">
-          Discover a world of excellence at Blue Bells Public School, located in
-          Sector 10, Gurugram.
-        </p>
-      </div>
+      {/* Background Shapes */}
+      <BackgroundShape style={{ top: "10%", left: "5%" }} />
+      <BackgroundShape style={{ bottom: "15%", right: "10%" }} />
 
-      <div className="w-full max-w-3xl lg:max-w-4xl relative">
+      {/* Titles */}
+      <Title>Blue Bells College</Title>
+      <Subtitle>Nurturing Young Minds</Subtitle>
+      <Subtitle>Located in Sector 10, Gurugram</Subtitle>
+
+      {/* Floating Carousel */}
+      <CarouselContainer>
         <Carousel
           autoplay
           prevArrow={<ArrowButton className="prev-arrow">{"<"}</ArrowButton>}
