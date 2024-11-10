@@ -1,34 +1,35 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Input, Button, Select, Form, message } from "antd"; // Import Ant Design components
+import { Input, Button, Select, Form, message } from "antd";
 import { useAuth } from "../../context";
 import { apiurl } from "../../devdata/constants";
 import Cookies from "js-cookie";
 
 function RecordSubject() {
-  const [form] = Form.useForm(); // Form instance for Ant Design Form
+  const [form] = Form.useForm();
   const { courses, loadingCourses } = useAuth();
 
-  const [loadingSubmit, setLoadingSubmit] = useState(false); // Track loading state for submission
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const handleSubmit = async (values) => {
-    setLoadingSubmit(true); // Set loading state while submitting
+    setLoadingSubmit(true);
     try {
       const token = Cookies.get("token");
+      values.units = values.units.map((unit) => unit.unit);
       await axios.post(`${apiurl}/subjects`, values, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      message.success("Subject data saved successfully"); // Use Ant Design message for success
-      form.resetFields(); // Reset the form fields after successful submission
+      message.success("Subject data saved successfully");
+      form.resetFields();
     } catch (error) {
       console.error("Error submitting form:", error);
       message.error(
         "There was an issue saving the subject data. Please try again."
-      ); // Use Ant Design message for error
+      );
     } finally {
-      setLoadingSubmit(false); // Reset loading state after submission
+      setLoadingSubmit(false);
     }
   };
 
@@ -130,16 +131,15 @@ function RecordSubject() {
                     <Button
                       type="dashed"
                       onClick={() => add()}
-                      icon={<span className="material-icons">add</span>}
                       disabled={loadingSubmit}
+                      className="ml-2"
                     >
                       Add Unit
                     </Button>
                     {fields.length > 1 && (
                       <Button
-                        type="link"
+                        danger
                         onClick={() => remove(name)}
-                        icon={<span className="material-icons">remove</span>}
                         disabled={loadingSubmit}
                       >
                         Remove
