@@ -1,7 +1,8 @@
 import React from "react";
 import { Tabs, Button, Layout, Typography } from "antd";
 import { Attendance, Profile } from "../../components"; // Assuming Profile is a component in your project
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined, HomeFilled } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
 
 const { TabPane } = Tabs;
@@ -10,7 +11,10 @@ const { Title } = Typography;
 
 const Teachdash = () => {
   const { logout } = useAuth();
-
+  const navigate = useNavigate();
+  const tohome = () => {
+    navigate("/");
+  };
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Header
@@ -26,21 +30,38 @@ const Teachdash = () => {
         <Title level={3} style={{ margin: 0, color: "#1890ff" }}>
           Teacher Dashboard
         </Title>
-        <Button
-          onClick={logout}
-          type="primary"
-          icon={<LogoutOutlined />}
-          danger
-          style={{
-            borderRadius: "50px",
-            padding: "0 20px",
-            fontWeight: "600",
-            backgroundColor: "#ff4d4f",
-            borderColor: "#ff4d4f",
-          }}
-        >
-          Log Out
-        </Button>
+        <div>
+          <Button
+            onClick={logout}
+            type="primary"
+            icon={<LogoutOutlined />}
+            danger
+            style={{
+              borderRadius: "50px",
+              padding: "0 20px",
+              fontWeight: "600",
+              backgroundColor: "#ff4d4f",
+              borderColor: "#ff4d4f",
+              marginRight: "10px",
+            }}
+          >
+            Log Out
+          </Button>
+          <Button
+            onClick={tohome}
+            type="primary"
+            icon={<HomeFilled />}
+            style={{
+              borderRadius: "50px",
+              padding: "0 20px",
+              fontWeight: "600",
+              backgroundColor: "green",
+              borderColor: "darkgreen",
+            }}
+          >
+            To Home
+          </Button>
+        </div>
       </Header>
 
       <Content

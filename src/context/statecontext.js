@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         confirmButtonText: "Okay",
       });
 
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (err) {
       console.error("Logout failed:", err);
       await Swal.fire({

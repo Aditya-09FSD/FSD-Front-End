@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { useAuth } from "../context";
-import { LogoutOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  DashboardOutlined,
+  LoginOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -13,6 +17,7 @@ function Navbar() {
   const handleTitleClick = () => {
     setIsMenuVisible(!isMenuVisible);
   };
+
   const todash = () => {
     if (role === "teacher") {
       navigate("/teacher");
@@ -22,9 +27,12 @@ function Navbar() {
       navigate("/student");
     }
   };
+  const tologin = () => {
+    navigate("/login");
+  };
   return (
     <nav className="bg-gray-800 p-4 fixed w-full top-0 shadow-lg z-50">
-      <div className="container mx-auto flex items-center justify-between relative">
+      <div className="container mx-auto flex items-center justify-between">
         <h1
           onClick={handleTitleClick}
           className={`cursor-pointer text-xl font-semibold transition-all duration-700 transform ${
@@ -36,84 +44,100 @@ function Navbar() {
           Blue Bells Public School
         </h1>
 
-        {/* Main Menu Items - Appear When Title Slides Left */}
+        {/* Main Menu Items */}
         <div
-          className={`transition-opacity duration-700 flex space-x-4 ${
+          className={`transition-opacity duration-700 flex items-center space-x-6 ${
             isMenuVisible ? "opacity-100" : "opacity-0 hidden"
           }`}
         >
-          <a
-            href="/"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Home
-          </a>
-          <a
-            href="/about"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            About
-          </a>
-          <a
-            href="/achievement"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Achievements
-          </a>
-          <a
-            href="/admissions"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Admissions
-          </a>
-          <a
-            href="/contact"
-            className="text-white hover:text-yellow-400 transition-all"
-          >
-            Contact
-          </a>
-
-          {!isLoggedIn ? (
+          {/* Left-Aligned Links */}
+          <div className="flex space-x-4">
             <Link
-              to="/login"
+              to="/"
               className="text-white hover:text-yellow-400 transition-all"
             >
-              Login
+              Home
             </Link>
-          ) : (
-            <>
-              <Button
-                onClick={logout}
-                type="primary"
-                icon={<LogoutOutlined />}
-                danger
-                style={{
-                  borderRadius: "50px",
-                  padding: "0 20px",
-                  fontWeight: "600",
-                  backgroundColor: "#ff4d4f",
-                  borderColor: "#ff4d4f",
-                }}
-              >
-                Log Out
-              </Button>
-              <Button
-                onClick={todash}
-                type="primary"
-                icon={<LogoutOutlined />}
-                danger
-                style={{
-                  borderRadius: "50px",
-                  padding: "0 20px",
-                  fontWeight: "600",
-                  backgroundColor: "green",
-                  borderColor: "darkgreen",
-                }}
-              >
-                To DashBoard
-              </Button>
-            </>
-          )}
+            <Link
+              to="/about"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
+              About
+            </Link>
+            <Link
+              to="/achievement"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
+              Achievements
+            </Link>
+            <Link
+              to="/admissions"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
+              Admissions
+            </Link>
+            <Link
+              to="/contact"
+              className="text-white hover:text-yellow-400 transition-all"
+            >
+              Contact
+            </Link>
+          </div>
+
+          {/* Right-Aligned Buttons */}
+          <div className="flex space-x-4 ml-auto">
+            {!isLoggedIn ? (
+              <>
+                <Button
+                  onClick={tologin}
+                  type="primary"
+                  icon={<LoginOutlined />}
+                  danger
+                  style={{
+                    borderRadius: "50px",
+                    padding: "0 20px",
+                    fontWeight: "600",
+                    backgroundColor: "blue",
+                    borderColor: "darkblue",
+                  }}
+                >
+                  Login
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={logout}
+                  type="primary"
+                  icon={<LogoutOutlined />}
+                  danger
+                  style={{
+                    borderRadius: "50px",
+                    padding: "0 20px",
+                    fontWeight: "600",
+                    backgroundColor: "#ff4d4f",
+                    borderColor: "#ff4d4f",
+                  }}
+                >
+                  Log Out
+                </Button>
+                <Button
+                  onClick={todash}
+                  type="primary"
+                  icon={<DashboardOutlined />}
+                  style={{
+                    borderRadius: "50px",
+                    padding: "0 20px",
+                    fontWeight: "600",
+                    backgroundColor: "green",
+                    borderColor: "darkgreen",
+                  }}
+                >
+                  To Dashboard
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </nav>

@@ -36,7 +36,11 @@ const Navs = () => {
           <Route path="/reset" element={<Reset />} />
           {isLoggedIn &&
             (role === "admin" ? (
-              <Route path="/admin" element={<AdminDash />} />
+              <>
+                <Route path="/admin" element={<AdminDash />} />
+                <Route path="/student" element={<StudentDash />} />
+                <Route path="/teacher" element={<TeachDash />} />
+              </>
             ) : role === "teacher" ? (
               <Route path="/teacher" element={<TeachDash />} />
             ) : (
