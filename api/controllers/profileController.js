@@ -10,42 +10,45 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 
 exports.getMe = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user.id)
-    .populate({
-      path: "roleid",
-      populate: [
-        {
-          path: "course",
-          model: "Course",
-        },
-        {
-          path: "panel",
-          model: "Panel",
-          populate: {
-            path: "students teachers timetable.subject timetable.teacher",
-            populate: [
-              { path: "subject", model: "Subject" },
-              { path: "teacher", model: "Teacher" },
-              { path: "students", model: "Student" },
-            ],
-          },
-        },
-        {
-          path: "subjects",
-          model: "Subject",
-        },
-      ],
-    })
-    .select("-password"); // Exclude the password from the response for security reasons
+  const user = await User.findById(req.user.id).select("-password");
 
   if (!user) {
     return next(new AppError("No user found with that ID", 404));
+  }
+
+  let userDetails;
+
+  if (user.role === "student") {
+    userDetails = await Student.findOne({ _id: user.roleid })
+      .populate({
+        path: "course",
+        select: "courseName branch year specialization",
+      })
+      .populate({
+        path: "panel",
+        select: "name timetable",
+      });
+  } else if (user.role === "teacher") {
+    userDetails = await Teacher.findOne({ _id: user.roleid })
+      .populate({
+        path: "subjects.subname",
+        select: "name units",
+      })
+      .populate({
+        path: "subjects.panels",
+        select: "name timetable",
+      });
+  }
+
+  if (!userDetails) {
+    userDetails = {};
   }
 
   res.status(200).json({
     status: "success",
     data: {
       user,
+      userDetails,
     },
   });
 });
