@@ -36,7 +36,7 @@ const createSendToken = (user, statusCode, req, res, view = false) => {
       role: user.role,
     });
   } else {
-    res.status(statusCode);
+    res.status(statusCode).json({ status: "success" });
   }
 };
 
@@ -95,7 +95,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   // Create and send the JWT token
-  createSendToken(newUser, 201, req, res);
+  createSendToken(newUser, 201, req, res, true);
 });
 
 // Login function with dynamic model resolution

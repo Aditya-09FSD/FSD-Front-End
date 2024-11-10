@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const StudentSchema = new mongoose.Schema({
   prn: {
-    type: mongoose.Schema.Types.BigInt,
+    type: String,
     required: true,
   },
   name: {

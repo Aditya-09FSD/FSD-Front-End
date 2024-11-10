@@ -3,7 +3,7 @@ import { Tabs, Button, Layout, Typography } from "antd";
 import { LogoutOutlined, HomeFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
-import { Profile, Addash, RecentActs } from "../../components";
+import { Profile, Addash, RecentActs, CourseDet } from "../../components";
 
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
@@ -138,7 +138,7 @@ const Studentdash = () => {
               }
               key="4"
             >
-              <RecentActs activities={userData?.activities || []} />
+              <CourseDet />
             </TabPane>
           </Tabs>
         </div>

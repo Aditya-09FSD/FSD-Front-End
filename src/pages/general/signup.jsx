@@ -5,7 +5,7 @@ import { Loading } from "../../components";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Tabs, Input, Button, Form, notification, Select } from "antd"; // Import Select component from Ant Design
+import { Tabs, Input, Button, Form, notification, Select } from "antd";
 import { useAuth } from "../../context";
 
 const { TabPane } = Tabs;
@@ -20,9 +20,9 @@ function Signup() {
     prn: "",
     panel: "",
     roll_no: "",
-    course: "", // Now a string for the selected course
+    course: "",
     subjects: [],
-    role: "student", // Default to student
+    role: "student",
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -79,23 +79,25 @@ function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     setIsLoading(true);
+    console.log(e);
 
     try {
-      const response = await axios.post(`${apiurl}/users/signup`, formData);
+      const token = Cookies.get("token");
 
-      if (response.data.token) {
-        Cookies.set("token", response.data.token, { expires: 7 });
+      const response = await axios.post(`${apiurl}/users/signup`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      if (response.status === 201) {
         await Swal.fire({
           title: "Signup Successful!",
           text: "You can now log in with your credentials.",
           icon: "success",
           confirmButtonText: "Proceed to Login",
         });
-
-        navigate("/login");
       }
     } catch (err) {
       notification.error({
@@ -111,17 +113,15 @@ function Signup() {
     setFormData({ ...formData, role: key });
   };
 
-  // Render loading component if isLoading is true
   if (isLoading) return <Loading />;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 to-blue-100 p-4">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg animate-fade-in">
         <h2 className="text-3xl font-extrabold text-center text-blue-600 sm:text-4xl">
-          Create an Account
+          Create Account For
         </h2>
 
-        {/* Ant Design Tabs for Role Selection */}
         <Tabs defaultActiveKey="student" onChange={handleTabChange}>
           <TabPane tab="Student" key="student">
             <Form onFinish={handleSubmit}>

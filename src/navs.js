@@ -44,7 +44,7 @@ const Navs = () => {
             ) : role === "teacher" ? (
               <Route path="/teacher" element={<TeachDash />} />
             ) : (
-              role === "user" && (
+              role === "student" && (
                 <Route path="/student" element={<StudentDash />} />
               )
             ))}
