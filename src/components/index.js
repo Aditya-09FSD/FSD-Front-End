@@ -15,3 +15,6 @@ export { default as Attendance } from "./teachercomp/recordattendance";
 export { default as Subjects } from "./admincomp/recordsubject";
 export { default as Courses } from "./admincomp/recordcource.jsx";
 export { default as Panel } from "./admincomp/recordpanel";
+
+export { default as Addash } from "./studentcomp/attendance.jsx";
+export { default as RecentActs } from "./studentcomp/recentaactivities.jsx";

@@ -1,16 +1,16 @@
 import React from "react";
 import { Tabs, Button, Layout, Typography } from "antd";
-import { Profile, Attendance } from "../../components"; // Assuming Attendance is also a component
 import { LogoutOutlined, HomeFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
+import { Profile, Addash, RecentActs } from "../../components";
 
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Studentdash = () => {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, userData } = useAuth();
   const navigate = useNavigate();
 
   const tohome = () => {
@@ -93,13 +93,11 @@ const Studentdash = () => {
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           }}
         >
-          {/* Tabs for different sections */}
           <Tabs
             defaultActiveKey="1"
             type="card"
             style={{ backgroundColor: "#f7f7f7", borderRadius: "15px" }}
           >
-            {/* Profile Tab */}
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
@@ -111,7 +109,6 @@ const Studentdash = () => {
               <Profile />
             </TabPane>
 
-            {/* Attendance Tab */}
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
@@ -120,10 +117,9 @@ const Studentdash = () => {
               }
               key="2"
             >
-              <Attendance />
+              <Addash subjects={userData?.subjects || []} />
             </TabPane>
 
-            {/* Additional tabs as needed */}
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
@@ -132,14 +128,7 @@ const Studentdash = () => {
               }
               key="3"
             >
-              <div>
-                <h3 className="text-xl font-semibold text-blue-600">
-                  Recent Activities
-                </h3>
-                <p className="mt-4 text-gray-600">
-                  Here you can show recent activities or notifications...
-                </p>
-              </div>
+              <RecentActs activities={userData?.activities || []} />
             </TabPane>
           </Tabs>
         </div>
