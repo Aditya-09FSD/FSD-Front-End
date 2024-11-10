@@ -24,6 +24,7 @@ function Signup() {
     role: "student",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
 
   const {
     courses,
@@ -34,7 +35,7 @@ function Signup() {
     loadingPanels,
     loadingSubjects,
   } = useAuth();
-
+  const [filteredPanels, setFilteredPanels] = useState([]);
   useEffect(() => {
     if (courses && courses.length > 0) {
       setFormData((prevState) => ({
@@ -105,6 +106,25 @@ function Signup() {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (formData.course) {
+      const filtered = panelArray.filter(
+        (panel) => panel.course === formData.course
+      );
+      setFilteredPanels(filtered);
+    }
+  }, [formData.course, panelArray]);
+
+  useEffect(() => {
+    if (formData.course) {
+      const subjectsForCourse = subjectArray.filter(
+        (subject) => subject.course === formData.course
+      );
+      setFilteredSubjects(subjectsForCourse);
+    } else {
+      setFilteredSubjects([]);
+    }
+  }, [formData.course, subjectArray]);
 
   const handleTabChange = (key) => {
     setFormData({ ...formData, role: key });
@@ -185,41 +205,6 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
-              <Form.Item
-                label="Panel"
-                name="panel"
-                rules={[{ required: true }]}
-              >
-                {/* Panel dropdown */}
-                {loadingPanels ? (
-                  <div>Loading panels...</div>
-                ) : error ? (
-                  <div style={{ color: "red" }}>Error loading panels</div>
-                ) : (
-                  <Select
-                    name="panel"
-                    value={formData.panel}
-                    onChange={(value) =>
-                      setFormData({ ...formData, panel: value })
-                    }
-                    options={panelArray.map((panel) => ({
-                      value: panel._id, // Assuming panel has 'id' and 'name'
-                      label: panel.name,
-                    }))}
-                  />
-                )}
-              </Form.Item>
-              <Form.Item
-                label="Roll Number"
-                name="roll_no"
-                rules={[{ required: true }]}
-              >
-                <Input
-                  name="roll_no"
-                  value={formData.roll_no}
-                  onChange={handleChange}
-                />
-              </Form.Item>
 
               {/* Course dropdown for students */}
               <Form.Item
@@ -245,6 +230,45 @@ function Signup() {
                     ))}
                   </Select>
                 )}
+              </Form.Item>
+
+              {/* Panel dropdown */}
+              <Form.Item
+                label="Panel"
+                name="panel"
+                rules={[{ required: true }]}
+              >
+                {loadingPanels ? (
+                  <div>Loading panels...</div>
+                ) : error ? (
+                  <div style={{ color: "red" }}>Error loading panels</div>
+                ) : (
+                  <Select
+                    name="panel"
+                    value={formData.panel}
+                    onChange={(value) =>
+                      setFormData({ ...formData, panel: value })
+                    }
+                  >
+                    {filteredPanels.map((panel) => (
+                      <Select.Option key={panel._id} value={panel._id}>
+                        {panel.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
+              </Form.Item>
+
+              <Form.Item
+                label="Roll Number"
+                name="roll_no"
+                rules={[{ required: true }]}
+              >
+                <Input
+                  name="roll_no"
+                  value={formData.roll_no}
+                  onChange={handleChange}
+                />
               </Form.Item>
 
               <Button type="primary" htmlType="submit" className="w-full">
@@ -318,7 +342,30 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
-
+              <Form.Item
+                label="Course"
+                name="course"
+                rules={[{ required: true }]}
+              >
+                {loadingCourses ? (
+                  <div>Loading courses...</div>
+                ) : error ? (
+                  <div style={{ color: "red" }}>Error loading courses</div>
+                ) : (
+                  <Select
+                    name="course"
+                    value={formData.course}
+                    onChange={handleCourseChange}
+                  >
+                    {courses.map((course) => (
+                      <Select.Option key={course._id} value={course._id}>
+                        {course.year} {"Y "} {course.courseName} {course.branch}{" "}
+                        {course.specialization}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                )}
+              </Form.Item>
               {/* Subjects and Panels Management */}
               <div className="space-y-4">
                 <label className="block font-semibold text-gray-700 mb-2">
@@ -338,9 +385,9 @@ function Signup() {
                       <Select
                         value={subject.subname}
                         onChange={(value) => handleSubjectChange(value, index)}
-                        options={subjectArray.map((subjectOption) => ({
-                          value: subjectOption._id,
-                          label: subjectOption.name, // Assuming subject has 'id' and 'name'
+                        options={filteredSubjects.map((subject) => ({
+                          value: subject._id,
+                          label: subject.name,
                         }))}
                         placeholder="Select a subject"
                         className="w-full mb-4"
@@ -367,12 +414,17 @@ function Signup() {
                               onChange={(value) =>
                                 setFormData({ ...formData, panel: value })
                               }
-                              options={panelArray.map((panel) => ({
-                                value: panel._id,
-                                label: panel.name,
-                              }))}
                               className="w-1/2"
-                            />
+                            >
+                              {filteredPanels.map((panel) => (
+                                <Select.Option
+                                  key={panel._id}
+                                  value={panel._id}
+                                >
+                                  {panel.name}
+                                </Select.Option>
+                              ))}
+                            </Select>
                           )}
                           <button
                             type="button"

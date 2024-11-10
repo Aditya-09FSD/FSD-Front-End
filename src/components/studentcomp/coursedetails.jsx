@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Button, Divider } from "antd";
 import { FilePdfOutlined } from "@ant-design/icons";
 import html2pdf from "html2pdf.js";
-import { Timetable } from "../"; // Import the Timetable component
 
 const CourseDetails = ({ user, userDetails }) => {
   if (!userDetails) return <p>Loading...</p>;

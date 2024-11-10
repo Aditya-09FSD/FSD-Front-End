@@ -137,12 +137,12 @@ const Admindash = () => {
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-                  Panel
+                  Courses
                 </span>
               }
               key="2"
             >
-              <Panel />
+              <Courses />
             </TabPane>
             <TabPane
               tab={
@@ -154,15 +154,16 @@ const Admindash = () => {
             >
               <Subjects />
             </TabPane>
+
             <TabPane
               tab={
                 <span style={{ fontSize: "16px", fontWeight: "bold" }}>
-                  Courses
+                  Panels
                 </span>
               }
               key="4"
             >
-              <Courses />
+              <Panel />
             </TabPane>
             <TabPane
               tab={

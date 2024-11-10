@@ -92,7 +92,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
       });
   }
 
-  if (!userDetails) {
+  if (!userDetails && user.role !== "admin") {
     return next(new AppError("No details found for this user", 404));
   }
 

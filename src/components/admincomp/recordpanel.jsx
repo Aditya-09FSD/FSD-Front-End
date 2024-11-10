@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Select, Input, Button, Form, Table } from "antd";
 import Swal from "sweetalert2";
-import { apiurl } from "../../devdata/constants";
 import { useAuth } from "../../context";
 import Cookies from "js-cookie";
 import { StopOutlined } from "@ant-design/icons";
-
+import axios from "axios";
+import { apiurl } from "../../devdata/constants";
 function RecordPanel() {
   const [form, setForm] = useState({
     name: "",
     course: "",
     timetable: [{ subject: "", location: "", timing: "", day: "" }],
   });
-  const { courses, subjectArray, loadingCourses } = useAuth();
+  const { courses, loadingCourses, subjectArray, loadingSubjects } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
 
   const timeSlots = [
     "8:30 - 9:30",
@@ -38,6 +38,18 @@ function RecordPanel() {
     "Saturday",
     "Sunday",
   ];
+
+  // Filter subjects when the course is selected
+  useEffect(() => {
+    if (form.course) {
+      const subjectsForCourse = subjectArray.filter(
+        (subject) => subject.course === form.course
+      );
+      setFilteredSubjects(subjectsForCourse);
+    } else {
+      setFilteredSubjects([]);
+    }
+  }, [form.course, subjectArray]);
 
   const handleFormChange = (value, name, index) => {
     if (name === "timetable") {
@@ -64,9 +76,10 @@ function RecordPanel() {
     setForm({ ...form, timetable: newTimetable });
   };
 
-  const handleSubmit = async (value) => {
+  const handleSubmit = async () => {
     setLoading(true);
 
+    // Validate timetable entries
     for (let entry of form.timetable) {
       if (!entry.subject || !entry.location || !entry.timing || !entry.day) {
         Swal.fire({
@@ -121,12 +134,13 @@ function RecordPanel() {
             handleFormChange({ name: "subject", value }, "timetable", index)
           }
           placeholder="Select Subject"
-          options={subjectArray.map((subject) => ({
+          options={filteredSubjects.map((subject) => ({
             value: subject._id,
             label: subject.name,
           }))}
           size="large"
           dropdownStyle={{ minWidth: "180px" }}
+          loading={loadingSubjects}
         />
       ),
     },
@@ -204,12 +218,16 @@ function RecordPanel() {
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 lg:mb-8 text-center">
           Record Panel
         </h2>
-        <Form onFinish={handleSubmit} layout="vertical" className="space-y-4 sm:space-y-6">
+        <Form
+          onFinish={handleSubmit}
+          layout="vertical"
+          className="space-y-4 sm:space-y-6"
+        >
           <Form.Item label="Name" name="name" required>
             <Input
               value={form.name}
               onChange={(e) => handleFormChange(e.target.value, "name")}
-              placeholder="Enter your name"
+              placeholder="Enter panel name"
             />
           </Form.Item>
 

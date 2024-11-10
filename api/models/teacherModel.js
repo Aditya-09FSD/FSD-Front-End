@@ -23,6 +23,10 @@ const TeacherSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+      },
       panels: {
         type: [String],
         default: [],

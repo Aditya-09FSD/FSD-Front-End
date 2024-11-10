@@ -29,3 +29,4 @@ crm inside -
         profile page
             avatar - below details
 
+suggest from the selection
