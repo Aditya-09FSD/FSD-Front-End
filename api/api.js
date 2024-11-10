@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "development") {
 app.enable("trust proxy");
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://3.110.221.81"],
+  origin: ["http://localhost:3000", "https://webfondapp.in"],
   credentials: true,
 };
 app.use(cors(corsOptions));
