@@ -3,36 +3,26 @@ const Course = require("./courseModel"); // Assuming you have a Course model
 
 const PanelSchema = new mongoose.Schema({
   name: String,
-  students: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Student",
-    },
-  ],
+
   course: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Course",
   },
-  teachers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Teacher",
-    },
-  ],
+
   timetable: [
     {
       subject: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Subject",
       },
-      teacher: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Teacher",
-      },
+
       location: {
         type: String,
       },
       timing: {
+        type: String,
+      },
+      day: {
         type: String,
       },
     },

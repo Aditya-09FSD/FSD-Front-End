@@ -95,6 +95,7 @@ const ArrowButton = styled.div`
   top: 50%;
   z-index: 20;
   transform: translateY(-50%);
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.7);
   }
@@ -104,27 +105,23 @@ const Hero = () => {
   return (
     <section
       style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        background: "linear-gradient(135deg, #83a4d4, #b6fbff)",
+        backgroundImage: `url('https://wallpapers.com/images/featured/anime-school-background-dh3ommnxthw4nln7.jpg')`,
       }}
     >
-      {/* Background Shapes */}
-      <BackgroundShape style={{ top: "10%", left: "5%" }} />
-      <BackgroundShape style={{ bottom: "15%", right: "10%" }} />
+      <div className="text-center mb-6 sm:mb-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white">
+          Blue Bells Public School
+        </h1>
+        <p className="mt-2 sm:mt-4 text-lg sm:text-xl md:text-2xl text-white">
+          Nurturing Young Minds
+        </p>
+        <p className="mt-1 sm:mt-2 text-white text-sm sm:text-base">
+          Discover a world of excellence at Blue Bells Public School, located in
+          Sector 10, Gurugram.
+        </p>
+      </div>
 
-      {/* Titles */}
-      <Title>Blue Bells Public School</Title>
-      <Subtitle>Nurturing Young Minds</Subtitle>
-      <Subtitle>Located in Sector 10, Gurugram</Subtitle>
-
-      {/* Floating Carousel */}
-      <CarouselContainer>
+      <div className="w-full max-w-3xl lg:max-w-4xl relative">
         <Carousel
           autoplay
           prevArrow={<ArrowButton className="prev-arrow">{"<"}</ArrowButton>}

@@ -8,11 +8,11 @@ function About() {
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto text-center px-4 lg:px-8">
           <h2 className="text-4xl font-bold text-blue-900 mt-8">
-            About Blue Bells Public School
+            About Blue Bells Public College
           </h2>
 
           <p className="mt-6 text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Blue Bells Public School, located in Sector 10, Gurugram, is
+            Blue Bells Public College, located in Sector 10, Gurugram, is
             renowned for its commitment to excellence in education and holistic
             development. With a focus on nurturing young minds, we strive to
             empower students to reach their full potential academically,
@@ -35,7 +35,7 @@ function About() {
               <h4 className="text-2xl font-bold text-blue-800">Our Vision</h4>
               <p className="mt-4 text-gray-800 leading-relaxed">
                 To cultivate a community of learners who are confident,
-                creative, and compassionate. Blue Bells Public School envisions
+                creative, and compassionate. Blue Bells Public College envisions
                 producing global citizens equipped with the skills and values
                 necessary to thrive in an ever-evolving world.
               </p>
