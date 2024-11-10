@@ -16,7 +16,6 @@ function RecordPanel() {
   const { courses, subjectArray, loadingCourses } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  // Define available time slots
   const timeSlots = [
     "8:30 - 9:30",
     "9:30 - 10:30",
@@ -30,7 +29,6 @@ function RecordPanel() {
     "3:45 - 4:45",
   ];
 
-  // Define available days of the week
   const daysOfWeek = [
     "Monday",
     "Tuesday",
@@ -41,7 +39,6 @@ function RecordPanel() {
     "Sunday",
   ];
 
-  // Handle form field changes
   const handleFormChange = (value, name, index) => {
     if (name === "timetable") {
       const newTimetable = [...form.timetable];
@@ -52,7 +49,6 @@ function RecordPanel() {
     }
   };
 
-  // Add a new timetable entry
   const addTimetableEntry = () => {
     setForm({
       ...form,
@@ -63,17 +59,14 @@ function RecordPanel() {
     });
   };
 
-  // Remove a timetable entry
   const removeTimetableEntry = (index) => {
     const newTimetable = form.timetable.filter((_, i) => i !== index);
     setForm({ ...form, timetable: newTimetable });
   };
 
-  // Handle form submission
   const handleSubmit = async (value) => {
     setLoading(true);
 
-    // Validate timetable data
     for (let entry of form.timetable) {
       if (!entry.subject || !entry.location || !entry.timing || !entry.day) {
         Swal.fire({
@@ -117,7 +110,6 @@ function RecordPanel() {
     }
   };
 
-  // Columns for timetable table
   const columns = [
     {
       title: "Subject",
@@ -133,8 +125,8 @@ function RecordPanel() {
             value: subject._id,
             label: subject.name,
           }))}
-          dropdownStyle={{ width: "250px" }}
           size="large"
+          dropdownStyle={{ minWidth: "180px" }}
         />
       ),
     },
@@ -170,7 +162,7 @@ function RecordPanel() {
             label: slot,
           }))}
           size="large"
-          dropdownStyle={{ width: "120px" }}
+          dropdownStyle={{ minWidth: "120px" }}
         />
       ),
     },
@@ -189,7 +181,7 @@ function RecordPanel() {
             label: day,
           }))}
           size="large"
-          dropdownStyle={{ width: "100px" }}
+          dropdownStyle={{ minWidth: "100px" }}
         />
       ),
     },
@@ -207,13 +199,12 @@ function RecordPanel() {
   ];
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-pink-100 to-blue-100 p-4">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-3xl">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-pink-100 to-blue-100 p-4 sm:p-8 lg:p-12">
+      <div className="bg-white shadow-lg rounded-lg p-4 sm:p-6 lg:p-8 w-full max-w-4xl">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 lg:mb-8 text-center">
           Record Panel
         </h2>
-        <Form onFinish={handleSubmit} layout="vertical" className="space-y-6">
-          {/* Name Input */}
+        <Form onFinish={handleSubmit} layout="vertical" className="space-y-4 sm:space-y-6">
           <Form.Item label="Name" name="name" required>
             <Input
               value={form.name}
@@ -222,7 +213,6 @@ function RecordPanel() {
             />
           </Form.Item>
 
-          {/* Course Selection */}
           <Form.Item label="Course" name="course" required>
             <Select
               value={form.course}
@@ -246,7 +236,6 @@ function RecordPanel() {
             </Select>
           </Form.Item>
 
-          {/* Timetable Table */}
           <Form.Item label="Timetable" required>
             <Table
               columns={columns}
@@ -254,6 +243,7 @@ function RecordPanel() {
               rowKey={(record, index) => index}
               pagination={false}
               size="middle"
+              scroll={{ x: "100%" }}
               footer={() => (
                 <Button type="primary" onClick={addTimetableEntry}>
                   Add Timetable Entry
@@ -262,7 +252,6 @@ function RecordPanel() {
             />
           </Form.Item>
 
-          {/* Submit Button */}
           <Button
             type="primary"
             htmlType="submit"

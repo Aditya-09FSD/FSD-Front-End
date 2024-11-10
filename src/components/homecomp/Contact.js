@@ -10,7 +10,6 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare form data
     const formData = { name, email, message };
 
     try {
@@ -37,21 +36,21 @@ const Contact = () => {
   return (
     <>
       <Navbar />
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto text-center px-4 lg:px-8">
-          <h2 className="text-4xl font-bold text-blue-900 mb-8 mt-8">
+      <section className="py-8 lg:py-16 bg-gray-100">
+        <div className="container mx-auto px-4 lg:px-8 text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold text-blue-900 mb-6 lg:mb-8">
             Contact Us
           </h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-12">
+          <p className="text-base lg:text-lg text-gray-700 max-w-2xl mx-auto mb-8 lg:mb-12">
             Have any questions or want to get in touch? We're here to help.
             Please feel free to reach out to us using the contact form below or
             through our contact information.
           </p>
 
-          <div className="flex justify-center space-x-8 mb-16">
+          <div className="flex flex-wrap justify-center space-y-6 lg:space-y-0 lg:space-x-8 mb-8 lg:mb-16">
             {/* Contact Info */}
-            <div className="bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg rounded-lg p-8 w-full sm:w-96 md:w-[400px]">
-              <h4 className="text-xl font-semibold text-blue-800 mb-4">
+            <div className="w-full sm:w-80 bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg rounded-lg p-6 lg:p-8">
+              <h4 className="text-lg lg:text-xl font-semibold text-blue-800 mb-4">
                 Our Address
               </h4>
               <p className="text-gray-600">
@@ -61,8 +60,8 @@ const Contact = () => {
               </p>
             </div>
 
-            <div className="bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg rounded-lg p-8 w-full sm:w-96 md:w-[400px]">
-              <h4 className="text-xl font-semibold text-blue-800 mb-4">
+            <div className="w-full sm:w-80 bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg rounded-lg p-6 lg:p-8">
+              <h4 className="text-lg lg:text-xl font-semibold text-blue-800 mb-4">
                 Phone & Email
               </h4>
               <p className="text-gray-600">
@@ -73,18 +72,18 @@ const Contact = () => {
           </div>
 
           {/* Contact Form Section */}
-          <div className="max-w-3xl mx-auto bg-gradient-to-r from-gray-50 to-gray-200 p-8 shadow-lg rounded-lg">
-            <h3 className="text-3xl font-semibold text-blue-900 text-center mb-8">
+          <div className="max-w-3xl mx-auto bg-gradient-to-r from-gray-50 to-gray-200 p-6 lg:p-8 shadow-lg rounded-lg">
+            <h3 className="text-2xl lg:text-3xl font-semibold text-blue-900 text-center mb-6 lg:mb-8">
               Get In Touch
             </h3>
 
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {/* Name */}
                 <div className="flex flex-col">
                   <label
                     htmlFor="name"
-                    className="text-lg font-medium text-gray-700 mb-2"
+                    className="text-base lg:text-lg font-medium text-gray-700 mb-2"
                   >
                     Your Name
                   </label>
@@ -92,7 +91,7 @@ const Contact = () => {
                     type="text"
                     id="name"
                     name="name"
-                    className="p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                     placeholder="Write your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -103,7 +102,7 @@ const Contact = () => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="email"
-                    className="text-lg font-medium text-gray-700 mb-2"
+                    className="text-base lg:text-lg font-medium text-gray-700 mb-2"
                   >
                     Your Email
                   </label>
@@ -111,7 +110,7 @@ const Contact = () => {
                     type="email"
                     id="email"
                     name="email"
-                    className="p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                     placeholder="Write your E-Mail"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -120,29 +119,29 @@ const Contact = () => {
               </div>
 
               {/* Message */}
-              <div className="flex flex-col mt-6">
+              <div className="flex flex-col mt-4 lg:mt-6">
                 <label
                   htmlFor="message"
-                  className="text-lg font-medium text-gray-700 mb-2"
+                  className="text-base lg:text-lg font-medium text-gray-700 mb-2"
                 >
                   Your Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
-                  className="p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                   placeholder="Write your message here"
-                  rows="6"
+                  rows="4"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
               </div>
 
               {/* Submit Button */}
-              <div className="text-center mt-6">
+              <div className="text-center mt-4 lg:mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all"
+                  className="w-full lg:w-auto bg-blue-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-full hover:bg-blue-700 transition-all"
                 >
                   Send Message
                 </button>
@@ -151,7 +150,7 @@ const Contact = () => {
 
             {/* Status Message */}
             {status && (
-              <div className="mt-4 text-center text-gray-700">
+              <div className="mt-4 lg:mt-6 text-center text-gray-700">
                 <p>{status}</p>
               </div>
             )}
