@@ -25,7 +25,7 @@ function RecordCourse() {
 
     try {
       const token = Cookies.get("token");
-      const response = await axios.post(`${apiurl}/courses`, courseData, {
+      await axios.post(`${apiurl}/courses`, courseData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,77 +50,79 @@ function RecordCourse() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-center">Record Course</h2>
-      <Form onFinish={handleSubmit} layout="vertical" className="space-y-6">
-        <Form.Item label="Course Name" required>
-          <Input
-            type="text"
-            name="courseName"
-            value={courseData.courseName}
-            onChange={handleChange}
-            placeholder="Enter course name"
-          />
-        </Form.Item>
+    <div className="py-10 bg-gradient-to-br from-pink-100 to-blue-100">
+      <div className="max-w-lg mx-auto p-6 shadow-md rounded-lg bg-white mt-10">
+        <h2 className="text-2xl font-bold mb-4 text-center">Record Course</h2>
+        <Form onFinish={handleSubmit} layout="vertical" className="space-y-6">
+          <Form.Item label="Course Name" required>
+            <Input
+              type="text"
+              name="courseName"
+              value={courseData.courseName}
+              onChange={handleChange}
+              placeholder="Enter course name"
+            />
+          </Form.Item>
 
-        <Form.Item label="Branch" required>
-          <Input
-            type="text"
-            name="branch"
-            value={courseData.branch}
-            onChange={handleChange}
-            placeholder="Enter branch name"
-          />
-        </Form.Item>
+          <Form.Item label="Branch" required>
+            <Input
+              type="text"
+              name="branch"
+              value={courseData.branch}
+              onChange={handleChange}
+              placeholder="Enter branch name"
+            />
+          </Form.Item>
 
-        <Form.Item label="Year" required>
-          <Input
-            type="text"
-            name="year"
-            value={courseData.year}
-            onChange={handleChange}
-            placeholder="Enter year"
-          />
-        </Form.Item>
+          <Form.Item label="Year" required>
+            <Input
+              type="text"
+              name="year"
+              value={courseData.year}
+              onChange={handleChange}
+              placeholder="Enter year"
+            />
+          </Form.Item>
 
-        <Form.Item label="Specialization" required>
-          <Input
-            type="text"
-            name="specialization"
-            value={courseData.specialization}
-            onChange={handleChange}
-            placeholder="Enter specialization"
-          />
-        </Form.Item>
+          <Form.Item label="Specialization" required>
+            <Input
+              type="text"
+              name="specialization"
+              value={courseData.specialization}
+              onChange={handleChange}
+              placeholder="Enter specialization"
+            />
+          </Form.Item>
 
-        <Form.Item label="Number of Panels" required>
-          <Input
-            type="number"
-            name="num_of_panels"
-            value={courseData.num_of_panels}
-            onChange={handleChange}
-            placeholder="Enter number of panels"
-          />
-        </Form.Item>
+          <Form.Item label="Number of Panels" required>
+            <Input
+              type="number"
+              name="num_of_panels"
+              value={courseData.num_of_panels}
+              onChange={handleChange}
+              placeholder="Enter number of panels"
+            />
+          </Form.Item>
 
-        <Form.Item label="Number of Students" required>
-          <Input
-            type="number"
-            name="num_of_students"
-            value={courseData.num_of_students}
-            onChange={handleChange}
-            placeholder="Enter number of students"
-          />
-        </Form.Item>
+          <Form.Item label="Number of Students" required>
+            <Input
+              type="number"
+              name="num_of_students"
+              value={courseData.num_of_students}
+              onChange={handleChange}
+              placeholder="Enter number of students"
+            />
+          </Form.Item>
 
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-        >
-          Submit Course
-        </Button>
-      </Form>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+          >
+            Submit Course
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

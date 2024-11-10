@@ -1,7 +1,7 @@
 const express = require("express");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
-
+const profController = require("../controllers/profileController");
 const router = express.Router();
 
 router.post("/login", authController.login);
@@ -14,7 +14,7 @@ router.get("/logout", authController.logout);
 // Protect all routes after this middle
 router.use(authController.protect);
 // router.patch("/updateMyPassword", authController.updatePassword);
-router.get("/me", userController.getMe, userController.getUser);
+router.get("/me", profController.getMe);
 // router.patch(
 //   "/updateMe",
 //   userController.uploadUserPhoto,

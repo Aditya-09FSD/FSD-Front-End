@@ -19,7 +19,8 @@ import {
   Privacy,
 } from "./components";
 const Navs = () => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, role } = useAuth();
+
   return (
     <>
       <Router>
@@ -33,13 +34,16 @@ const Navs = () => {
 
           <Route path="/login" element={<Login />} />
           <Route path="/reset" element={<Reset />} />
-          {isLoggedIn && (
-            <>
+          {isLoggedIn &&
+            (role === "admin" ? (
               <Route path="/admin" element={<AdminDash />} />
-              <Route path="/student" element={<StudentDash />} />
+            ) : role === "teacher" ? (
               <Route path="/teacher" element={<TeachDash />} />
-            </>
-          )}
+            ) : (
+              role === "user" && (
+                <Route path="/student" element={<StudentDash />} />
+              )
+            ))}
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

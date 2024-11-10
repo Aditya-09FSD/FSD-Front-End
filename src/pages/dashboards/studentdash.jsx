@@ -4,7 +4,7 @@ import { useAuth } from "../../context";
 import { Profile } from "../../components";
 
 const Studentdash = () => {
-  const { isLoggedIn } = useAuth(); // Get login status and user data
+  const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
     return (
@@ -23,10 +23,8 @@ const Studentdash = () => {
           Student Dashboard
         </h1>
 
-        {/* Profile Component */}
         <Profile />
 
-        {/* Additional Dashboard Content */}
         <div className="mt-8">
           <h3 className="text-xl font-semibold text-blue-600">
             Recent Activities

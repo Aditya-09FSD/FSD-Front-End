@@ -10,8 +10,8 @@ function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when the form is submitted
-    setMessage(null); // Reset the message on every submit attempt
+    setLoading(true);
+    setMessage(null);
 
     try {
       const response = await axios.post("/api/users/resetPassword", {
@@ -19,7 +19,6 @@ function ResetPassword() {
       });
       console.log(response.data);
 
-      // Show success message using SweetAlert
       await Swal.fire({
         title: "Check your email!",
         text: "Please check your inbox for the password reset link.",
@@ -27,9 +26,8 @@ function ResetPassword() {
         confirmButtonText: "Okay",
       });
 
-      setUsername(""); // Clear the input field after successful request
+      setUsername("");
     } catch (error) {
-      // Show error message using SweetAlert if the request fails
       await Swal.fire({
         title: "Error!",
         text: "There was an issue resetting your password. Please try again.",
@@ -37,11 +35,10 @@ function ResetPassword() {
         confirmButtonText: "Okay",
       });
     } finally {
-      setLoading(false); // Stop loading when the request finishes (either success or failure)
+      setLoading(false);
     }
   };
 
-  // Show loading spinner while waiting for the response
   if (loading) {
     return <Loading />;
   }

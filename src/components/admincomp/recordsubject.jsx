@@ -40,7 +40,7 @@ function RecordSubject() {
   if (!isCardVisible) return null; // Return null if the card is not visible
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-pink-100 to-blue-100 p-4">
       <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-2xl transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-2xl hover:bg-gray-50 relative">
         {/* Close Button */}
         <button

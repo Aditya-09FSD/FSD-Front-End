@@ -3,12 +3,12 @@ import axios from "axios";
 import { apiurl } from "../../devdata/constants";
 import { Loading, Navbar } from "../../components";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
-import Swal from "sweetalert2"; // Import SweetAlert2
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { useAuth } from "../../context";
 
 function Login() {
-  const { login } = useAuth();
+  const { login, setrole } = useAuth();
 
   const [formData, setFormData] = useState({
     username: "akashpatelyo2@gmail.com",
@@ -16,8 +16,8 @@ function Login() {
     role: "user",
   });
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
-  const navigate = useNavigate(); // Initialize navigate
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,33 +32,33 @@ function Login() {
     try {
       const response = await axios.post(`${apiurl}/users/login`, formData);
       if (response.data.token) {
-        // Store the token in cookies
         Cookies.set("token", response.data.token, { expires: 7 });
         login();
-        // Show success alert using SweetAlert
+
         await Swal.fire({
           title: "Login Successful!",
           text: "You will be redirected to your dashboard.",
           icon: "success",
           confirmButtonText: "Okay",
         });
-        if (response.data.role === "teacher") {
+        const role = response.data.role;
+        setrole(role);
+        localStorage.setItem("role", JSON.stringify(role));
+        if (role === "teacher") {
           navigate("/teacher");
-        } else if (response.data.role === "admin") {
+        } else if (role === "admin") {
           navigate("/admin");
         } else {
           navigate("/student");
         }
-        // Redirect to the dashboard
       }
     } catch (err) {
       setError("Invalid login credentials");
     } finally {
-      setIsLoading(false); // Stop loading after the request completes
+      setIsLoading(false);
     }
   };
 
-  // Render loading component if isLoading is true
   if (isLoading) return <Loading />;
 
   return (

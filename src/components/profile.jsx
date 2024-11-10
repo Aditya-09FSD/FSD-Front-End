@@ -1,29 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context"; // Import the context
-import { apiurl } from "../devdata/constants"; // Import the API URL
+import { useAuth } from "../context";
+import { apiurl } from "../devdata/constants";
 import { Loading } from "./";
 import Cookies from "js-cookie";
 
 const Profile = () => {
-  const { userData, isLoggedIn, setUserData } = useAuth(); // Get user data from context
+  const { userData, isLoggedIn, setUserData } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  // Fetch user data after the component mounts
   useEffect(() => {
     if (isLoggedIn) {
-      const token = Cookies.get("token"); // Get token from cookies
+      const token = Cookies.get("token");
 
-      // Check if token exists
       if (token) {
         axios
           .get(`${apiurl}/users/me`, {
-            headers: { Authorization: `Bearer ${token}` }, // Use token from cookies
+            headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
-            console.log(response.data.data.data);
+            console.log(response.data.data.user);
 
-            setUserData(response.data.data.data); // Store user data in context
+            setUserData(response.data.data.user);
             setLoading(false);
           })
           .catch((error) => {
@@ -32,16 +30,16 @@ const Profile = () => {
           });
       } else {
         console.log("No token found in cookies.");
-        setLoading(false); // Stop loading if no token
+        setLoading(false);
       }
     }
-  }, [isLoggedIn, setUserData]); // Only run when isLoggedIn changes
+  }, [isLoggedIn, setUserData]);
 
   if (loading) {
-    return <Loading />; // Show loading component while fetching data
+    return <Loading />;
   }
 
-  return (
+  return userData ? (
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="flex justify-center mb-6">
         <img
@@ -65,6 +63,26 @@ const Profile = () => {
           Role: {userData?.role || "User"}
         </p>
       </div>
+    </div>
+  ) : (
+    <div className="p-6 bg-red-100 text-red-700 shadow-lg rounded-lg flex items-center space-x-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        className="w-6 h-6 text-red-500"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M18.364 5.636a9 9 0 11-12.728 12.728 9 9 0 0112.728-12.728zm-5.659 7.769a1 1 0 00-1.414 0L8.293 16.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414zm4.293-5.243a1 1 0 10-1.414-1.414L11 11.293a1 1 0 101.414 1.414l5.293-5.293z"
+        />
+      </svg>
+      <p className="text-lg font-semibold">
+        There was some error fetching your data~!!
+      </p>
     </div>
   );
 };
