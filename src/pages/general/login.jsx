@@ -76,7 +76,7 @@ function Login() {
               placeholder="Email Address"
               value={formData.username}
               onChange={handleChange}
-              className="w-full p-3 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-200"
+              className="w-full p-3 h-1/2 text-gray-700 placeholder-gray-400 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-200"
               required
             />
             <input
