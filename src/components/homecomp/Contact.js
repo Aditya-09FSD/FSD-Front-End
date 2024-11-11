@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Navbar } from "../";
+import { Input, Button } from "antd";
+import Swal from "sweetalert2";
 
 const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,20 +25,23 @@ const Contact = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setStatus("Message sent successfully!");
+        Swal.fire("Success", "Message sent successfully!", "success");
+        setName("");
+        setEmail("");
+        setMessage("");
       } else {
-        setStatus(`Error: ${result.error}`);
+        Swal.fire("Error", `Error: ${result.error}`, "error");
       }
     } catch (error) {
-      setStatus("Failed to send message.");
+      Swal.fire("Error", "Failed to send message.", "error");
     }
   };
 
   return (
     <>
       <Navbar />
-      <section className="py-8 lg:py-16 bg-gray-100">
-        <div className="container mx-auto px-4 lg:px-8 text-center">
+      <section className="py-8 lg:py-16 bg-blue-50">
+        <div className="container mx-auto px-4 lg:px-8 text-center p-4">
           <h2 className="text-3xl lg:text-4xl font-bold text-blue-900 mb-6 lg:mb-8">
             Contact Us
           </h2>
@@ -77,7 +81,7 @@ const Contact = () => {
               Get In Touch
             </h3>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {/* Name */}
                 <div className="flex flex-col">
@@ -87,11 +91,10 @@ const Contact = () => {
                   >
                     Your Name
                   </label>
-                  <input
-                    type="text"
+                  <Input
                     id="name"
                     name="name"
-                    className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    size="large"
                     placeholder="Write your Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -106,11 +109,11 @@ const Contact = () => {
                   >
                     Your Email
                   </label>
-                  <input
+                  <Input
                     type="email"
                     id="email"
                     name="email"
-                    className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    size="large"
                     placeholder="Write your E-Mail"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -119,41 +122,36 @@ const Contact = () => {
               </div>
 
               {/* Message */}
-              <div className="flex flex-col mt-4 lg:mt-6">
+              <div className="flex flex-col">
                 <label
                   htmlFor="message"
                   className="text-base lg:text-lg font-medium text-gray-700 mb-2"
                 >
                   Your Message
                 </label>
-                <textarea
+                <Input.TextArea
                   id="message"
                   name="message"
-                  className="p-3 lg:p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  rows={4}
+                  size="large"
                   placeholder="Write your message here"
-                  rows="4"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
               </div>
 
               {/* Submit Button */}
-              <div className="text-center mt-4 lg:mt-6">
-                <button
-                  type="submit"
-                  className="w-full lg:w-auto bg-blue-600 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-full hover:bg-blue-700 transition-all"
+              <div className="text-center">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                  className="w-full lg:w-auto bg-blue-600 hover:bg-blue-700 transition-all"
                 >
                   Send Message
-                </button>
+                </Button>
               </div>
             </form>
-
-            {/* Status Message */}
-            {status && (
-              <div className="mt-4 lg:mt-6 text-center text-gray-700">
-                <p>{status}</p>
-              </div>
-            )}
           </div>
         </div>
       </section>
