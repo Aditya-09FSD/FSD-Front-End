@@ -11,8 +11,8 @@ function Login() {
   const { login, setrole } = useAuth();
 
   const [formData, setFormData] = useState({
-    username: "akashpatelyo2@gmail.com",
-    password: "akashpatel",
+    username: "",
+    password: "",
     role: "user",
   });
   const [error, setError] = useState(null);
