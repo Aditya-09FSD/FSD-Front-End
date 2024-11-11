@@ -3,7 +3,7 @@ import { Carousel } from "antd";
 import "antd/dist/reset.css";
 
 // Replace static image with dynamic import
-const back = require("../../devdata/assets/image.png");
+const back = require("../../devdata/assets/back.jpg");
 
 const Hero = () => {
   return (
