@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { apiurl } from "../../devdata/constants";
 import Cookies from "js-cookie";
 import { useAuth } from "../../context";
 import { Button, Input, Select, Checkbox, Form, Space, Typography } from "antd";
 import Swal from "sweetalert2";
-const AttendanceForm = () => {
-  const { userdet } = useAuth();
-  const [selectedCourse, setSelectedCourse] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedPanel, setSelectedPanel] = useState("");
-  const [students, setStudents] = useState([]);
-  const [attendanceData, setAttendanceData] = useState([]);
 
+const { Title } = Typography;
+
+function RecordAttendance() {
+  const [students, setStudents] = useState([]);
+  const [attendanceData, setAttendanceData] = useState({
+    date: "",
+    subject: "",
+    students: [],
+  });
+  const { subjectArray } = useAuth();
+
+  // Fetch students when the component mounts
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -24,153 +29,169 @@ const AttendanceForm = () => {
         });
         const fetchedStudents = response.data.data.data;
 
-        if (selectedPanel) {
-          const filteredStudents = fetchedStudents.filter(
-            (student) => student.panel._id === selectedPanel
-          );
-          setStudents(filteredStudents);
-          setAttendanceData((prevData) => ({
-            ...prevData,
-            students: filteredStudents.map((student) => ({
-              stdId: student._id,
-              attendance: false,
-            })),
-          }));
-        }
+        // Initialize students in attendanceData with default attendance set to false
+        setAttendanceData((prevData) => ({
+          ...prevData,
+          students: fetchedStudents.map((student) => ({
+            stdId: student._id,
+            attendance: false,
+          })),
+        }));
+        setStudents(fetchedStudents);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
-
     fetchStudents();
-  }, [selectedPanel]);
+  }, []);
 
-  // Handler to select a course
-  const handleCourseChange = (e) => {
-    setSelectedCourse(e.target.value);
-    setSelectedSubject("");
-    setSelectedPanel("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  // Handler to select a subject based on the course
-  const handleSubjectChange = (e) => {
-    setSelectedSubject(e.target.value);
-    setSelectedPanel("");
+  const handleSubjectChange = (value) => {
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      subject: value,
+    }));
   };
 
-  // Handler to select a panel
-  const handlePanelChange = (e) => {
-    setSelectedPanel(e.target.value);
+  const handleAttendanceChange = (stdId) => {
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      students: prevData.students.map((student) =>
+        student.stdId === stdId
+          ? { ...student, attendance: !student.attendance }
+          : student
+      ),
+    }));
   };
 
-  const handleAttendanceSubmit = async () => {
+  const handleSubmit = async () => {
     try {
       const token = Cookies.get("token");
-      const response = await axios.post(
-        `${apiurl}/attendance`,
-        {
-          date: new Date(),
-          subject: selectedSubject,
-          course: selectedCourse,
-          panel: selectedPanel,
-          students: attendanceData,
+      await axios.post(`${apiurl}/attendance`, attendanceData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log("Attendance submitted:", response.data);
+      });
+      Swal.fire({
+        title: "Success!",
+        text: "Attendance recorded successfully!",
+        icon: "success",
+        confirmButtonText: "Okay",
+        customClass: {
+          confirmButton: "ant-btn ant-btn-primary",
+        },
+      });
+      setAttendanceData({
+        date: "",
+        subject: "",
+        students: students.map((student) => ({
+          stdId: student._id,
+          attendance: false,
+        })),
+      });
     } catch (error) {
-      console.error("Error submitting attendance:", error);
+      Swal.fire({
+        title: "Error",
+        text: "Error recording attendance. Please try again.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+        customClass: {
+          confirmButton: "ant-btn ant-btn-danger",
+        },
+      });
     }
   };
 
   return (
-    <div>
-      <h1>Mark Attendance</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAttendanceSubmit();
-        }}
+    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <Title level={2} style={{ textAlign: "center", color: "#1890ff" }}>
+        Record Attendance
+      </Title>
+      <Form
+        onFinish={handleSubmit}
+        className="space-y-6"
+        layout="vertical"
+        initialValues={attendanceData}
       >
-        <div>
-          <label>Course</label>
-          <select value={selectedCourse} onChange={handleCourseChange}>
-            <option value="">Select Course</option>
-            {userdet.subjects.map((subject) => (
-              <option key={subject.course._id} value={subject.course._id}>
-                {subject.course.courseName}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Form.Item
+          label="Date"
+          name="date"
+          rules={[{ required: true, message: "Please select a date!" }]}
+        >
+          <Input
+            type="date"
+            name="date"
+            value={attendanceData.date}
+            onChange={handleChange}
+            style={{
+              borderRadius: "10px",
+              padding: "10px",
+              border: "1px solid #dcdfe6",
+            }}
+          />
+        </Form.Item>
 
-        {selectedCourse && (
-          <div>
-            <label>Subject</label>
-            <select value={selectedSubject} onChange={handleSubjectChange}>
-              <option value="">Select Subject</option>
-              {userdet.subjects
-                .find((subject) => subject.course._id === selectedCourse)
-                ?.subjects.map((subject) => (
-                  <option key={subject._id} value={subject._id}>
-                    {subject.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-        )}
+        <Form.Item
+          label="Subject"
+          name="subject"
+          rules={[{ required: true, message: "Please select a subject!" }]}
+        >
+          <Select
+            value={attendanceData.subject}
+            onChange={handleSubjectChange}
+            options={subjectArray.map((subjectOption) => ({
+              value: subjectOption._id,
+              label: subjectOption.name,
+            }))}
+            placeholder="Select a subject"
+            className="w-full mb-4"
+          />
+        </Form.Item>
 
-        {selectedSubject && (
-          <div>
-            <label>Panel</label>
-            <select value={selectedPanel} onChange={handlePanelChange}>
-              <option value="">Select Panel</option>
-              {userdet.panels.map((panel) => (
-                <option key={panel._id} value={panel._id}>
-                  {panel.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <Form.Item label="Students">
+          {students.map((student) => (
+            <Space
+              key={student._id}
+              style={{ display: "flex", marginBottom: "10px" }}
+            >
+              <Checkbox
+                checked={attendanceData.students.some(
+                  (att) => att.stdId === student._id && att.attendance
+                )}
+                onChange={() => handleAttendanceChange(student._id)}
+                style={{ fontSize: "16px", padding: "5px" }}
+              />
+              <span style={{ fontSize: "16px", color: "#555" }}>
+                {student.name}
+              </span>
+            </Space>
+          ))}
+        </Form.Item>
 
-        {selectedPanel && students.length > 0 && (
-          <div>
-            <h3>Students</h3>
-            {students.map((student) => (
-              <div key={student._id}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={attendanceData.some(
-                      (data) => data.stdId === student._id && data.attendance
-                    )}
-                    onChange={() => {
-                      setAttendanceData((prev) =>
-                        prev.map((data) =>
-                          data.stdId === student._id
-                            ? { ...data, attendance: !data.attendance }
-                            : data
-                        )
-                      );
-                    }}
-                  />
-                  {student.name}
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <button type="submit">Submit Attendance</button>
-      </form>
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          style={{
+            borderRadius: "10px",
+            backgroundColor: "#1890ff",
+            borderColor: "#1890ff",
+            padding: "12px 0",
+            fontSize: "16px",
+          }}
+        >
+          Submit Attendance
+        </Button>
+      </Form>
     </div>
   );
-};
+}
 
-export default AttendanceForm;
+export default RecordAttendance;

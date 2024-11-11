@@ -4,6 +4,7 @@ const StudentSchema = new mongoose.Schema({
   prn: {
     type: String,
     required: true,
+    unique: true,
   },
   name: {
     type: String,
