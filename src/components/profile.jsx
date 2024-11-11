@@ -19,7 +19,7 @@ const Profile = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
-            console.log(response.data.data);
+            // console.log(response.data.data);
 
             setUserData(response.data.data.user);
             setUserDet(response.data.data.userDetails);

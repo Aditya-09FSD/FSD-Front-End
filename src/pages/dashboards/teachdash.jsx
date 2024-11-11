@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, Button, Layout, Typography } from "antd";
-import { Attendance, Profile } from "../../components"; // Assuming Profile is a component in your project
+import { Attendance, Profile, CourseT } from "../../components"; // Assuming Profile is a component in your project
 import { LogoutOutlined, HomeFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context";
@@ -10,7 +10,7 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 
 const Teachdash = () => {
-  const { logout } = useAuth();
+  const { logout, userdet } = useAuth();
   const navigate = useNavigate();
   const tohome = () => {
     navigate("/");
@@ -109,7 +109,16 @@ const Teachdash = () => {
             >
               <Attendance />
             </TabPane>
-            {/* Add other tabs as needed */}
+            <TabPane
+              tab={
+                <span style={{ fontSize: "16px", fontWeight: "bold" }}>
+                  Details
+                </span>
+              }
+              key="3"
+            >
+              <CourseT userDetails={userdet} />
+            </TabPane>
           </Tabs>
         </div>
       </Content>

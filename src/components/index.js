@@ -11,6 +11,7 @@ export { default as Admission } from "./homecomp/Admission";
 export { default as Contact } from "./homecomp/Contact";
 
 export { default as Attendance } from "./teachercomp/recordattendance";
+export { default as CourseT } from "./teachercomp/coursedet";
 
 export { default as Subjects } from "./admincomp/recordsubject";
 export { default as Courses } from "./admincomp/recordcource.jsx";
