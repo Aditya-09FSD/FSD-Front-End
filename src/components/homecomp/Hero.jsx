@@ -2,12 +2,15 @@ import React from "react";
 import { Carousel } from "antd";
 import "antd/dist/reset.css";
 
+// Replace static image with dynamic import
+const back = require("../../devdata/assets/image.png");
+
 const Hero = () => {
   return (
     <section
       className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-cover bg-center"
       style={{
-        backgroundImage: `url('https://wallpapers.com/images/featured/anime-school-background-dh3ommnxthw4nln7.jpg')`,
+        backgroundImage: `url(${back})`, // Dynamically applying the background image
       }}
     >
       {/* Title */}
@@ -27,10 +30,10 @@ const Hero = () => {
           {["1.jpeg", "2.jpeg", "4.jpg", "3.jpeg"].map((image, index) => (
             <div
               key={index}
-              className="bg-black bg-opacity-70 p-4 rounded-2xl shadow-lg"
+              className="bg-black bg-opacity-70 p-4 rounded-2xl shadow-lg transform transition-all duration-300 hover:scale-105"
             >
               <img
-                src={`/images/${image}`}
+                src={`/images/${image}`} // Assuming these images are located in the public directory
                 alt={`Slide ${index + 1}`}
                 className="w-full max-h-[400px] object-cover rounded-lg transform transition-transform duration-300 hover:scale-105"
               />
