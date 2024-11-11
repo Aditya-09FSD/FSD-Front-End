@@ -296,6 +296,20 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
+              
+              <Form.Item
+                label="Bio"
+                name="bio"
+                rules={[{ required: true, message: "Please enter a bio" }]}
+              >
+                <Input.TextArea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows={4}
+                />
+              </Form.Item>
+
 
               <Button type="primary" htmlType="submit" className="w-full">
                 Sign Up
