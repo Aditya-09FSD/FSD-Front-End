@@ -32,7 +32,6 @@ function Navbar() {
     navigate("/login");
   };
 
-  // Hide the menu when route changes
   useEffect(() => {
     setIsMenuVisible(false);
   }, [location.pathname]);
