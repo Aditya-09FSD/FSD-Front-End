@@ -15,12 +15,14 @@ const TeacherSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    select: false,
     required: true,
   },
   subjects: [
     {
       subname: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subject",
         required: true,
       },
       course: {
@@ -28,7 +30,12 @@ const TeacherSchema = new mongoose.Schema({
         ref: "Course",
       },
       panels: {
-        type: [String],
+        type: [
+          {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Panel",
+          },
+        ],
         default: [],
       },
     },

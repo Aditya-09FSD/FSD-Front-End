@@ -36,30 +36,48 @@ function Signup() {
     loadingSubjects,
   } = useAuth();
   const [filteredPanels, setFilteredPanels] = useState([]);
+
+  const handleCourseChangeForSubject = (value, index) => {
+    const newSubjects = [...formData.subjects];
+    newSubjects[index].course = value;
+
+    const subjectsForCourse = subjectArray.filter(
+      (subject) => subject.course === value
+    );
+
+    setFilteredSubjects(subjectsForCourse);
+    const filtered = panelArray.filter((panel) => panel.course === value);
+    setFilteredPanels(filtered);
+    setFormData({ ...formData, subjects: newSubjects });
+  };
+
   useEffect(() => {
     if (courses && courses.length > 0) {
       setFormData((prevState) => ({
         ...prevState,
-        course: courses[0].courseName, // Assuming courses contain 'courseName'
+        course: courses[0].courseName,
       }));
     }
   }, [courses]);
 
-  // Handle changes for normal form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle changes for the course dropdown
   const handleCourseChange = (value) => {
     setFormData({ ...formData, course: value });
   };
 
-  // Handle subject and panel management
   const handleSubjectChange = (value, index) => {
     const newSubjects = [...formData.subjects];
-    newSubjects[index].subname = value; // Update subject name in the respective subject
+    newSubjects[index].subname = value;
+    setFormData({ ...formData, subjects: newSubjects });
+  };
+
+  const handlePanelChange = (value, subjectIndex, panelIndex) => {
+    const newSubjects = [...formData.subjects];
+    newSubjects[subjectIndex].panels[panelIndex] = value;
     setFormData({ ...formData, subjects: newSubjects });
   };
 
@@ -76,13 +94,18 @@ function Signup() {
     setFormData({ ...formData, subjects: newSubjects });
   };
 
-  const handleSubmit = async (e) => {
-    setIsLoading(true);
-    console.log(e);
+  const removePanel = (subjectIndex, panelIndex) => {
+    const newSubjects = [...formData.subjects];
+    newSubjects[subjectIndex].panels.splice(panelIndex, 1);
+    setFormData({ ...formData, subjects: newSubjects });
+  };
 
+  const handleSubmit = async (e) => {
+    console.log(formData);
+
+    setIsLoading(true);
     try {
       const token = Cookies.get("token");
-
       const response = await axios.post(`${apiurl}/users/signup`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -106,6 +129,7 @@ function Signup() {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (formData.course) {
       const filtered = panelArray.filter(
@@ -292,6 +316,7 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
+
               <Form.Item
                 label="Email Address"
                 name="username"
@@ -303,6 +328,7 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
+
               <Form.Item
                 label="Phone Number"
                 name="phone"
@@ -315,6 +341,7 @@ function Signup() {
                   maxLength={10}
                 />
               </Form.Item>
+
               <Form.Item
                 label="Password"
                 name="password"
@@ -326,6 +353,7 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
+
               <Form.Item
                 label="Confirm Password"
                 name="passwordConfirm"
@@ -337,6 +365,7 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
+
               <Form.Item label="PRN" name="prn" rules={[{ required: true }]}>
                 <Input
                   name="prn"
@@ -344,31 +373,8 @@ function Signup() {
                   onChange={handleChange}
                 />
               </Form.Item>
-              <Form.Item
-                label="Course"
-                name="course"
-                rules={[{ required: true }]}
-              >
-                {loadingCourses ? (
-                  <div>Loading courses...</div>
-                ) : error ? (
-                  <div style={{ color: "red" }}>Error loading courses</div>
-                ) : (
-                  <Select
-                    name="course"
-                    value={formData.course}
-                    onChange={handleCourseChange}
-                  >
-                    {courses.map((course) => (
-                      <Select.Option key={course._id} value={course._id}>
-                        {course.year} {"Y "} {course.courseName} {course.branch}{" "}
-                        {course.specialization}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-              {/* Subjects and Panels Management */}
+
+              <br />
               <div className="space-y-4">
                 <label className="block font-semibold text-gray-700 mb-2">
                   Subjects
@@ -378,77 +384,81 @@ function Signup() {
                     key={index}
                     className="border border-gray-200 p-4 rounded-lg mb-4"
                   >
-                    Subject
-                    {loadingSubjects ? (
-                      <div>Loading panels...</div>
-                    ) : error ? (
-                      <div style={{ color: "red" }}>Error loading panels</div>
-                    ) : (
-                      <Select
-                        value={subject.subname}
-                        onChange={(value) => handleSubjectChange(value, index)}
-                        options={filteredSubjects.map((subject) => ({
-                          value: subject._id,
-                          label: subject.name,
-                        }))}
-                        placeholder="Select a subject"
-                        className="w-full mb-4"
-                      />
-                    )}
+                    {/* Course Select Input for Each Subject */}
+                    <label className="block">Course</label>
+                    <Select
+                      value={subject.course} // Set the course for this subject
+                      onChange={(value) =>
+                        handleCourseChangeForSubject(value, index)
+                      } // Handle course change
+                      options={courses.map((course) => ({
+                        value: course._id,
+                        label: `${course.year} Y ${course.courseName} ${course.branch} ${course.specialization}`,
+                      }))}
+                      placeholder="Select a course"
+                      className="w-full mb-4"
+                    />
+
+                    {/* Subject Select Input */}
+                    <label>Subject</label>
+                    <Select
+                      value={subject.id}
+                      onChange={(value) => handleSubjectChange(value, index)}
+                      options={filteredSubjects.map((subject) => ({
+                        value: subject._id,
+                        label: subject.name,
+                      }))}
+                      placeholder="Select a subject"
+                      className="w-full mb-4"
+                    />
+
                     <div className="mt-2">
-                      Panels
+                      <label>Panels</label>
                       {subject.panels.map((panel, panelIndex) => (
                         <div
                           key={panelIndex}
                           className="flex items-center space-x-2 mb-2"
                         >
-                          {loadingPanels ? (
-                            <div>Loading panels...</div>
-                          ) : error ? (
-                            <div style={{ color: "red" }}>
-                              Error loading panels
-                            </div>
-                          ) : (
-                            <Select
-                              name="panel"
-                              dropdownStyle={{ width: 100 }}
-                              value={formData.panel}
-                              onChange={(value) =>
-                                setFormData({ ...formData, panel: value })
-                              }
-                              className="w-1/2"
-                            >
-                              {filteredPanels.map((panel) => (
-                                <Select.Option
-                                  key={panel._id}
-                                  value={panel._id}
-                                >
-                                  {panel.name}
-                                </Select.Option>
-                              ))}
-                            </Select>
-                          )}
+                          <Select
+                            value={panel}
+                            onChange={(value) =>
+                              handlePanelChange(value, index, panelIndex)
+                            } // Handle panel change
+                            className="w-1/2"
+                            options={filteredPanels.map((panel) => ({
+                              value: panel._id,
+                              label: panel.name,
+                            }))}
+                          />
                           <button
                             type="button"
-                            onClick={() => addPanel(index)}
-                            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                            onClick={() => removePanel(index, panelIndex)} // Remove a panel
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                           >
-                            +
+                            -
                           </button>
                         </div>
                       ))}
+                      <button
+                        type="button"
+                        onClick={() => addPanel(index)} // Add a new panel
+                        className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                 ))}
                 <button
                   type="button"
-                  onClick={addSubject}
+                  onClick={addSubject} // Add a new subject
                   className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
                   Add Another Subject
                 </button>
               </div>
               <br />
+
               <Button type="primary" htmlType="submit" className="w-full">
                 Sign Up
               </Button>

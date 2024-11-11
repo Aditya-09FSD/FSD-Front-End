@@ -76,11 +76,15 @@ exports.getMe = catchAsync(async (req, res, next) => {
       subjectsAttendance,
     };
   } else if (user.role === "teacher") {
-    // For teachers, fetch their subjects and associated panels
+    // For teachers, fetch their subjects, courses, and associated panels
     userDetails = await Teacher.findOne({ _id: user.roleid })
       .populate({
         path: "subjects.subname",
         select: "name units",
+      })
+      .populate({
+        path: "subjects.course",
+        select: "courseName branch",
       })
       .populate({
         path: "subjects.panels",

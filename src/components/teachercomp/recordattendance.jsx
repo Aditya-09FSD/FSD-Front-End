@@ -12,12 +12,18 @@ function RecordAttendance() {
   const [students, setStudents] = useState([]);
   const [attendanceData, setAttendanceData] = useState({
     date: "",
+    course: "",
     subject: "",
+    panel: "",
     students: [],
   });
-  const { subjectArray } = useAuth();
 
-  // Fetch students when the component mounts
+  const { userdet } = useAuth();
+
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
+  const [filteredPanels, setFilteredPanels] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
+
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -28,38 +34,62 @@ function RecordAttendance() {
           },
         });
         const fetchedStudents = response.data.data.data;
-
-        // Initialize students in attendanceData with default attendance set to false
-        setAttendanceData((prevData) => ({
-          ...prevData,
-          students: fetchedStudents.map((student) => ({
-            stdId: student._id,
-            attendance: false,
-          })),
-        }));
-        setStudents(fetchedStudents);
+        setFilteredStudents(fetchedStudents);
       } catch (error) {
         console.error("Error fetching students:", error);
       }
     };
+
     fetchStudents();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleCourseChange = (value) => {
     setAttendanceData((prevData) => ({
       ...prevData,
-      [name]: value,
+      course: value,
+      subject: "",
+      panel: "",
     }));
+
+    const selectedCourse = userdet.courses.find(
+      (course) => course._id === value
+    );
+    setFilteredSubjects(selectedCourse ? selectedCourse.subjects : []);
   };
 
+  // Handle subject selection
   const handleSubjectChange = (value) => {
     setAttendanceData((prevData) => ({
       ...prevData,
       subject: value,
+      panel: "", // Reset panel when subject changes
     }));
+
+    // Find the subject and filter panels
+    const selectedSubject = userdet.courses
+      .flatMap((course) => course.subjects)
+      .find((subject) => subject._id === value);
+
+    setFilteredPanels(selectedSubject ? selectedSubject.panels : []);
   };
 
+  // Handle panel selection
+  const handlePanelChange = (value) => {
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      panel: value,
+    }));
+
+    // Filter students based on selected panel
+    const selectedPanel = userdet.panels.find((panel) => panel._id === value);
+    const studentsInPanel = filteredStudents.filter(
+      (student) => student.panel._id === selectedPanel._id
+    );
+
+    setFilteredStudents(studentsInPanel); // Update student list based on selected panel
+  };
+
+  // Handle attendance change
   const handleAttendanceChange = (stdId) => {
     setAttendanceData((prevData) => ({
       ...prevData,
@@ -71,6 +101,7 @@ function RecordAttendance() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async () => {
     try {
       const token = Cookies.get("token");
@@ -90,8 +121,10 @@ function RecordAttendance() {
       });
       setAttendanceData({
         date: "",
+        course: "",
         subject: "",
-        students: students.map((student) => ({
+        panel: "",
+        students: filteredStudents.map((student) => ({
           stdId: student._id,
           attendance: false,
         })),
@@ -129,12 +162,30 @@ function RecordAttendance() {
             type="date"
             name="date"
             value={attendanceData.date}
-            onChange={handleChange}
+            onChange={(e) =>
+              setAttendanceData({ ...attendanceData, date: e.target.value })
+            }
             style={{
               borderRadius: "10px",
               padding: "10px",
               border: "1px solid #dcdfe6",
             }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Course"
+          name="course"
+          rules={[{ required: true, message: "Please select a course!" }]}
+        >
+          <Select
+            value={attendanceData.course}
+            onChange={handleCourseChange}
+            options={userdet.courses.map((course) => ({
+              value: course._id,
+              label: course.courseName,
+            }))}
+            placeholder="Select a course"
           />
         </Form.Item>
 
@@ -146,17 +197,32 @@ function RecordAttendance() {
           <Select
             value={attendanceData.subject}
             onChange={handleSubjectChange}
-            options={subjectArray.map((subjectOption) => ({
-              value: subjectOption._id,
-              label: subjectOption.name,
+            options={filteredSubjects.map((subject) => ({
+              value: subject._id,
+              label: subject.name,
             }))}
             placeholder="Select a subject"
-            className="w-full mb-4"
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Panel"
+          name="panel"
+          rules={[{ required: true, message: "Please select a panel!" }]}
+        >
+          <Select
+            value={attendanceData.panel}
+            onChange={handlePanelChange}
+            options={filteredPanels.map((panel) => ({
+              value: panel._id,
+              label: panel.name,
+            }))}
+            placeholder="Select a panel"
           />
         </Form.Item>
 
         <Form.Item label="Students">
-          {students.map((student) => (
+          {filteredStudents.map((student) => (
             <Space
               key={student._id}
               style={{ display: "flex", marginBottom: "10px" }}

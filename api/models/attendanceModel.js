@@ -9,6 +9,14 @@ const AttendanceSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Subject",
   },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course",
+  },
+  panel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Panel",
+  },
   students: [
     {
       stdId: {
