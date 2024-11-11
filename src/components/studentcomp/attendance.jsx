@@ -27,11 +27,12 @@ const Attendance = ({ subjectsAttendance }) => {
       title: "Attendance %",
       key: "attendancePercentage",
       render: (record) =>
-        `${((record.lecturesAttended / record.totalLectures) * 100).toFixed(
-          2
-        )}%`,
+        record.lecturesAttended != null && record.totalLectures
+          ? `${((record.lecturesAttended / record.totalLectures) * 100).toFixed(2)}%`
+          : "Not yet uploaded",
       responsive: ["xs", "sm", "md", "lg"],
-    },
+    }
+    
   ];
 
   // Use subjectsAttendance to create the data source
