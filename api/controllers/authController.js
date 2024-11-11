@@ -63,6 +63,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       passwordConfirm: req.body.passwordConfirm,
       role: "teacher",
       roleid: teacher._id, // Link user to teacher
+      bio: req.body.bio,
     });
   }
 
@@ -86,6 +87,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       passwordConfirm: req.body.passwordConfirm,
       role: "student",
       roleid: student._id, // Link user to student
+      bio: req.body.bio,
     });
   }
 

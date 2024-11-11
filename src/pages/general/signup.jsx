@@ -61,6 +61,7 @@ function Signup() {
   }, [courses]);
 
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -374,6 +375,20 @@ function Signup() {
                 />
               </Form.Item>
 
+              {/* Bio Field for Teacher */}
+              <Form.Item
+                label="Bio"
+                name="bio"
+                rules={[{ required: true, message: "Please enter a bio" }]}
+              >
+                <Input.TextArea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  rows={4}
+                />
+              </Form.Item>
+
               <br />
               <div className="space-y-4">
                 <label className="block font-semibold text-gray-700 mb-2">
@@ -387,10 +402,10 @@ function Signup() {
                     {/* Course Select Input for Each Subject */}
                     <label className="block">Course</label>
                     <Select
-                      value={subject.course} // Set the course for this subject
+                      value={subject.course}
                       onChange={(value) =>
                         handleCourseChangeForSubject(value, index)
-                      } // Handle course change
+                      }
                       options={courses.map((course) => ({
                         value: course._id,
                         label: `${course.year} Y ${course.courseName} ${course.branch} ${course.specialization}`,
@@ -423,7 +438,7 @@ function Signup() {
                             value={panel}
                             onChange={(value) =>
                               handlePanelChange(value, index, panelIndex)
-                            } // Handle panel change
+                            }
                             className="w-1/2"
                             options={filteredPanels.map((panel) => ({
                               value: panel._id,
@@ -432,7 +447,7 @@ function Signup() {
                           />
                           <button
                             type="button"
-                            onClick={() => removePanel(index, panelIndex)} // Remove a panel
+                            onClick={() => removePanel(index, panelIndex)}
                             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                           >
                             -
@@ -441,7 +456,7 @@ function Signup() {
                       ))}
                       <button
                         type="button"
-                        onClick={() => addPanel(index)} // Add a new panel
+                        onClick={() => addPanel(index)}
                         className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
                       >
                         +
@@ -451,7 +466,7 @@ function Signup() {
                 ))}
                 <button
                   type="button"
-                  onClick={addSubject} // Add a new subject
+                  onClick={addSubject}
                   className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
                   Add Another Subject
